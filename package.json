@@ -1,10 +1,13 @@
 {
   "name": "shaklee-my-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This is a non-official Shaklee Malaysia REST API for products/promotions",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.ts",
+    "build": "npx tsc",
+    "start": "node dist/app.js"
   },
   "keywords": [
     "shaklee",
@@ -12,5 +15,23 @@
     "api"
   ],
   "author": "Jeng Khaw",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.11",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.41",
+    "jest": "^28.1.1",
+    "nodemon": "^2.0.16",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "engines": {
+    "node": ">=16"
+  }
 }
