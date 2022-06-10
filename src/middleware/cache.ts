@@ -13,8 +13,8 @@ export default (cacheDurationInMs: number) => {
     res: ExtendedRes,
     next: express.NextFunction
   ) => {
-    console.log(req.originalUrl);
-    console.log(req.url);
+    //console.log(req.originalUrl);   // - /api/v1/product
+    //console.log(req.url);           // - /product
     const key = "_express_" + (req.url || req.originalUrl);
     const cData = c.get(key);
     if (cData) {
