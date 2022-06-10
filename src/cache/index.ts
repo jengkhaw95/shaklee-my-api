@@ -9,7 +9,7 @@ export default (expiresInMs: number) => {
         console.log("Cache missed");
         return;
       }
-      console.log("Cache hit");
+      console.log(`Cache hit [${key}]`);
       return payload.data;
     },
     set(key: string, data: any) {

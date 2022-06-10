@@ -10,7 +10,7 @@ export const connectToDB = async () => {
     throw Error("MONGODB_NAME is missing");
   }
   if (!db) {
-    console.log("CONNECT");
+    console.log("Connected to db");
     const client = new mongodb.MongoClient(process.env.MONGODB_URI);
     await client.connect();
     db = client.db(process.env.MONGODB_NAME);

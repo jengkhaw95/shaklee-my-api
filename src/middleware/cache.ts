@@ -15,7 +15,7 @@ export default (cacheDurationInMs: number) => {
   ) => {
     //console.log(req.originalUrl);   // - /api/v1/product
     //console.log(req.url);           // - /product
-    const key = "_express_" + (req.url || req.originalUrl);
+    const key = "_express_" + (req.originalUrl || req.url);
     const cData = c.get(key);
     if (cData) {
       return res.send(cData);
