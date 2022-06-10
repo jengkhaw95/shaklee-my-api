@@ -133,7 +133,7 @@ export default class Shaklee {
       return payload.data.map((d: any) => ({
         product_no: d.prodno,
         name: d["prod_disp_name"],
-        status: d["status_label"].toLowerCase(),
+        status: d["status_label"].toLowerCase() || "available",
         tags: d.tags.split(",").map((t: string) => t.replace(".", "").trim()),
         images: d.images.map(
           (i: any) =>
