@@ -1,6 +1,6 @@
 import axios, {AxiosResponseHeaders} from "axios";
 import * as cheerio from "cheerio";
-import {parseEntities} from "parse-entities";
+import * as entities from "entities";
 
 const BASE_URL = "https://www.shaklee.com.my";
 const LOGIN_URL = "https://www.shaklee.com.my/login/submit";
@@ -133,7 +133,7 @@ export default class Shaklee {
       } = res.data;
       return payload.data.map((d: any) => ({
         product_no: d.prodno,
-        name: parseEntities(d["prod_disp_name"]),
+        name: entities.decode(d["prod_disp_name"]),
         status: d["status_label"].toLowerCase() || "available",
         tags: d.tags.split(",").map((t: string) => t.replace(".", "").trim()),
         images: d.images.map(
