@@ -13,7 +13,7 @@ const logUpdatesToDb = async (document: any[]) => {
   }));
 
   const db = await connectToDB();
-  return await db.collection("updateLogs").insertMany(formattedDoc);
+  return await db.collection("update_logs").insertMany(formattedDoc);
 };
 
 (async () => {
