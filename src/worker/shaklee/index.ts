@@ -17,9 +17,6 @@ export default class Shaklee {
   private loginCredential: LoginCredential;
   private isAuth: boolean;
   constructor(loginCredential: LoginCredential) {
-    //this.cookie ;
-    //this.token;
-
     if (!loginCredential.username || !loginCredential.password) {
       throw Error("Invalid credential");
     }
