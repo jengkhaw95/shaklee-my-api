@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
     }
 
     const filter = Object.keys(temp).length ? temp : undefined;
-    console.log(filter);
     const db = await connectToDB();
     const data = await db.collection("products").find(filter).toArray();
     const count = data.length;
@@ -32,7 +31,6 @@ router.get("/", async (req, res) => {
 router.get("/:productId", async (req, res) => {
   try {
     const {productId: product_no} = req.params;
-    console.log({product_no});
     const db = await connectToDB();
     const data = await db.collection("products").findOne({product_no});
     if (!data) {
