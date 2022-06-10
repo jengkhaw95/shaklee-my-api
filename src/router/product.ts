@@ -34,9 +34,11 @@ router.get("/:productId", async (req, res) => {
     const {productId: product_no} = req.params;
     console.log({product_no});
     const db = await connectToDB();
-    const data = await db.collection("products").find({product_no}).toArray();
-    const count = data.length;
-    res.json({ok: true, data, count});
+    const data = await db.collection("products").findOne({product_no});
+    if (!data) {
+      return res.json({ok: false, error: "No data"});
+    }
+    res.json({ok: true, data});
   } catch (error) {
     res.json({ok: false, error});
   }
