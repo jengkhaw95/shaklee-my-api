@@ -23,6 +23,17 @@ const logUpdatesToDb = async (document: any) => {
 
   const productsToInsert = products.map((d) => ({...d, _id: d.product_no}));
 
+  const outdatedProducts = await productCollection
+    .find({_id: {$nin: productsToInsert.map((d) => d._id)}})
+    .toArray();
+
+  if (outdatedProducts.length) {
+    await productCollection.updateMany(
+      {_id: {$in: outdatedProducts.map((d) => d._id)}},
+      {$set: {status: "archived", lastUpdateAt: Date.now()}}
+    );
+  }
+
   const bulkWriteActions = productsToInsert.map((p) => ({
     replaceOne: {filter: {_id: p._id}, replacement: p, upsert: true},
   }));
