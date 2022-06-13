@@ -1,5 +1,5 @@
-// Entry for worker
-// Job: to push new data to database
+// Entry point for worker
+// Job: update data to database
 
 import "dotenv/config";
 import {connectToDB} from "../db";
@@ -54,23 +54,5 @@ const logUpdatesToDb = async (document: any) => {
       ts: Date.now(),
     });
   }
-
-  // Session error
-
-  //const session = mongoClient.startSession();
-
-  //await session.withTransaction(async () => {
-  //  await productCollection.deleteMany({_id: {$in: productIdsToInsert}});
-  //  await productCollection.insertMany(productsToInsert);
-  //});
-  //await session.endSession();
-
-  //if (productsToInsert.length > 0) {
-  //  const insertResponse = await productCollection.insertMany(productsToInsert);
-  //  if (insertResponse.acknowledged) {
-  //    await logUpdatesToDb(productsToInsert);
-  //    console.log(`Inserted ${insertResponse.insertedCount} product(s)`);
-  //  }
-  //}
   process.exit();
 })();
