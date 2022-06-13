@@ -15,6 +15,7 @@ This project is hosted on Heroku. [View Demo](https://shaklee-my-api.herokuapp.c
 ## How it works
 
 As this project is non-official, all the data are acquired from Shaklee Malaysia website.
+
 The project contains 2 major parts:
 
 ### Server
