@@ -157,4 +157,14 @@ export default class Shaklee {
       return [];
     }
   }
+
+  async getHeroBanners() {
+    const res = await axios.get(BASE_URL);
+    const l: string[] = [];
+    const $ = cheerio.load(res.data);
+    $("source[srcset][media]").each((_, e) => {
+      l.push(`${BASE_URL}${$(e).attr("srcset")}`);
+    });
+    return l;
+  }
 }
