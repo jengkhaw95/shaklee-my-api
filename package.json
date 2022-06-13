@@ -2,7 +2,13 @@
   "name": "shaklee-my-api",
   "version": "1.0.0",
   "description": "This is a non-official Shaklee Malaysia REST API for products/promotions",
+  "homepage": "https://shaklee-my-api.herokuapp.com",
   "main": "dist/index.js",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/jengkhaw95/shaklee-my-api/issues",
+    "email": "jengkhaw95@gmail.com"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.ts",
