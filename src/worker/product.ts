@@ -1,0 +1,3 @@
+import {workerUpdateProducts} from ".";
+
+workerUpdateProducts();

@@ -96,6 +96,16 @@ export default class Shaklee {
     return res.join("&");
   }
 
+  private urlParser = (url: string | undefined) => {
+    if (url === undefined) {
+      return "";
+    }
+    if (!url.startsWith("http")) {
+      return `${BASE_URL}${url}`;
+    }
+    return url;
+  };
+
   async getProducts() {
     if (!this.isAuth) {
       await this.init();
@@ -160,11 +170,33 @@ export default class Shaklee {
 
   async getHeroBanners() {
     const res = await axios.get(BASE_URL);
-    const l: string[] = [];
+    const l: any[] = [];
     const $ = cheerio.load(res.data);
-    $("source[srcset][media]").each((_, e) => {
-      l.push(`${BASE_URL}${$(e).attr("srcset")}`);
+
+    $("[role=listbox] > div.carousel-item a").each((_, e) => {
+      const url = this.urlParser($(e).attr("href"));
+      const images_url: string[] = [];
+      let name: string | undefined;
+      $(e)
+        .find("source[srcset][media]")
+        .each((i, f) => {
+          images_url.push(this.urlParser(`${$(f).attr("srcset")}`));
+          const s = $(f).attr("srcset")?.split("/") || [];
+          name =
+            name ??
+            (s.length
+              ? s[s.length - 1].split("_FULL")[0]
+              : $(f).attr("srcset"));
+        });
+      l.push({
+        url,
+        images_url,
+        name,
+      });
     });
+    //$("source[srcset][media]").each((_, e) => {
+    //  l.push(`${BASE_URL}${$(e).attr("srcset")}`);
+    //});
     return l;
   }
 }

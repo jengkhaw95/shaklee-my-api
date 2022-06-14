@@ -1,0 +1,3 @@
+import {workerUpdateBanner} from ".";
+
+workerUpdateBanner();
