@@ -9,7 +9,7 @@ const router = express.Router();
  * @apiGroup Product
  * @apiVersion  1.0.0
  * @apiQuery {string="available","oos","promotion","archived"} [status] Products status
- * @apiQuery {string} [search]  Products tags search
+ * @apiQuery {string} [search]  Products tags/category search
  * @apiSuccess (200) {Boolean}  ok    Ok
  * @apiSuccess (200) {Object[]} data  Products data
  * @apiSuccess (200) {Number}   count Products count
@@ -66,6 +66,7 @@ router.get("/", async (req, res) => {
     }
     if (q.search) {
       temp.tags = {$in: [q.search]};
+      temp.pcat = {$in: [q.search]};
     }
 
     const filter = Object.keys(temp).length ? temp : undefined;
