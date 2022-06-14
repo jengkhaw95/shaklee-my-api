@@ -16,7 +16,8 @@
     "build": "npm run build:ts && npm run build:docs",
     "build:docs": "npx apidoc -i src/ -o docs/output/",
     "build:ts": "npx tsc",
-    "worker:product": "node dist/worker/index.js"
+    "worker:product": "node dist/worker/product.js",
+    "worker:banner": "node dist/worker/banner.js"
   },
   "keywords": [
     "shaklee",
