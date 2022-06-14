@@ -8,7 +8,7 @@ const router = express.Router();
  * @apiName GetProducts
  * @apiGroup Product
  * @apiVersion  1.0.0
- * @apiQuery {string="available","oos","promotion","archived"} [status] Products status
+ * @apiQuery {string="available","oos","promotion","archived"} [status] Products status (Can used multiple split with ',' E.g. status=oos,promotion)
  * @apiQuery {string} [search]  Products tags/category search
  * @apiSuccess (200) {Boolean}  ok    Ok
  * @apiSuccess (200) {Object[]} data  Products data
@@ -61,8 +61,11 @@ router.get("/", async (req, res) => {
   try {
     const q = req.query;
     let temp: any = {};
-    if (q.status) {
-      temp.status = q.status;
+    if (q.status && typeof q.status === "string") {
+      if (q.status.split(",").length > 1) {
+        temp.status = {$in: q.status.split(",")};
+      } else {
+      }
     }
     if (q.search) {
       temp.tags = {$in: [q.search]};
