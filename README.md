@@ -25,4 +25,4 @@ The server is used to host the API endpoints. (possibly docs in future)
 ### Worker
 
 The worker is used to retrieve latest data externally in a reasonable interval of time.
-All the product data are then stored in database (`Mongodb`).
+All the data are then stored in database (`Mongodb`).
