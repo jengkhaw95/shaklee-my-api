@@ -4,7 +4,7 @@ This project is not affiliated, associated, authorized, endorsed by, or in any w
 
 Data return from API endpoint in this project can be publicly obtained in [official website](https://www.shaklee.com.my/). However, they are the property of Shaklee Products (Malaysia) Sdn. Bhd. or Shaklee Corporation.
 
-# Introduction
+## Introduction
 
 This projects uses `Express` as a backend server to serve RESTful API for Shaklee Malaysia products.
 
@@ -16,7 +16,7 @@ This project is hosted on Heroku. [View Demo](https://shaklee-my-api.herokuapp.c
 
 As this project is non-official, all the data are acquired from Shaklee Malaysia website.
 
-The project contains 2 major parts:
+The project contains 2 parts:
 
 ### Server
 
