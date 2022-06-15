@@ -8,8 +8,8 @@ const router = express.Router();
  * @apiName GetProducts
  * @apiGroup Product
  * @apiVersion  1.0.0
- * @apiQuery {string="available","oos","promotion","archived"} [status] Products status (Can used multiple split with ',' E.g. status=oos,promotion)
- * @apiQuery {string} [search]  Products tags/category search
+ * @apiQuery {string="available","oos","promotion","archived"} [status] Products status (Can use multiple split with ',' E.g. status=oos,promotion)
+ * @apiQuery {string} [search]  Products tags/category search (Can use multiple split with ',' E.g. search=esp,sachet)
  * @apiSuccess (200) {Boolean}  ok    Ok
  * @apiSuccess (200) {Object[]} data  Products data
  * @apiSuccess (200) {Number}   count Products count
