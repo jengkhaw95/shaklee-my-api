@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  *
- * @api {GET} /banner Get all products
+ * @api {GET} /banner Get all banners
  * @apiName GetBanners
  * @apiGroup Banner
  * @apiVersion  1.0.0
