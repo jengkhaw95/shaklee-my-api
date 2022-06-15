@@ -16,7 +16,16 @@ export const connectToDB = async () => {
     console.log("Connected to db");
     await mongoClient.connect();
     db = mongoClient.db(process.env.MONGODB_NAME);
+    await createInitialIndex(db);
     return db;
   }
   return db;
+};
+
+const createInitialIndex = async (db: mongodb.Db) => {
+  db.collection("products").createIndex({
+    tags: "text",
+    name: "text",
+    pcat: "text",
+  });
 };
