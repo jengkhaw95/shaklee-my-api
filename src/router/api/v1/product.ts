@@ -63,13 +63,22 @@ router.get("/", async (req, res) => {
     let temp: any = {};
     if (q.status && typeof q.status === "string") {
       if (q.status.split(",").length > 1) {
-        temp.status = {$in: q.status.split(",")};
+        temp.status = {$in: q.status.split(",").map((s) => s.trim())};
       } else {
+        temp.status = q.status;
       }
     }
-    if (q.search) {
-      temp.tags = {$in: [q.search]};
-      temp.pcat = {$in: [q.search]};
+    if (q.search && typeof q.search === "string") {
+      if (q.search.split(",").length > 1) {
+        temp.$text = {
+          $search: q.search
+            .split(",")
+            .map((s) => s.trim())
+            .join(" "),
+        };
+      } else {
+        temp.$text = {$search: q.search};
+      }
     }
 
     const filter = Object.keys(temp).length ? temp : undefined;
