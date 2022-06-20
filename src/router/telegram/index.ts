@@ -71,12 +71,12 @@ const telegram = (app: express.Application) => {
             products.map((prod) => bot.setProductCache(prod.name, prod));
             await bot.sendButtons(
               id,
-              `Found <b>${products.length}</b> result(s)`,
+              `Found <b>${products.length}</b> result(s) for:\n${text}`,
               products.map((prod) => prod.name)
             );
             bot.setClientState(id, "Product");
           } else {
-            await bot.sendMessage(id, `No product found (search: ${text})`);
+            await bot.sendMessage(id, `No product found for:\n${text}`);
           }
         }
         break;
