@@ -5,15 +5,18 @@ import {TelegramBot} from "../../telegram";
 const availableOptions = ["Search Product", "Promotion"];
 
 const parseProductInfo = (product: any) => {
-  const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n\n<b>Type</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
+  const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n\n<b>Status</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
   //  console.log(r);
   return r;
 };
 
 const telegram = (app: express.Application) => {
   const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
-
-  app.use("/telegram", async (req, res) => {
+  if (!process.env.TELEGRAM_BOT_TOKEN) {
+    console.warn("TELEGRAM BOT TOKEN is missing, webhook DID NOT register");
+    return;
+  }
+  app.use(`/telegram/${process.env.TELEGRAM_BOT_TOKEN}`, async (req, res) => {
     if (req.method !== "POST") {
       return res.status(404).send("Not found");
     }
