@@ -5,7 +5,7 @@ import {TelegramBot} from "../../telegram";
 const availableOptions = ["Search Product", "Promotion"];
 
 const parseProductInfo = (product: any) => {
-  const r = `<b>${product.name}</b>\n\n<b>Type</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
+  const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n\n<b>Type</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
   //  console.log(r);
   return r;
 };
@@ -82,7 +82,9 @@ const telegram = (app: express.Application) => {
         break;
       case "Product": {
         const product = bot.getProductFromCache(text);
-        await bot.sendMessage(id, parseProductInfo(product));
+        await bot.sendMessage(id, parseProductInfo(product), "HTML", {
+          disable_web_page_preview: false,
+        });
         bot.setClientState(id, "None");
         break;
       }
