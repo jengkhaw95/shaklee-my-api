@@ -44,7 +44,7 @@ export class TelegramBot {
     parseMode: ParseMode = "HTML",
     option?: any
   ) {
-    console.log("Sending message");
+    //console.log("Sending message");
     return axios.get(this.getUrl("sendMessage"), {
       params: {chat_id: chatId, text, parse_mode: parseMode, ...option},
     });
@@ -62,7 +62,7 @@ export class TelegramBot {
       one_time_keyboard: true,
       selective: true,
     };
-    console.log("Sending buttons");
+    //console.log("Sending buttons");
     return this.sendMessage(chatId, text, parseMode, {reply_markup});
   }
 }

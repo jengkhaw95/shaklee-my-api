@@ -4,6 +4,12 @@ import {TelegramBot} from "../../telegram";
 
 const availableOptions = ["Search Product", "Promotion"];
 
+const parseProductInfo = (product: any) => {
+  const r = `<b>${product.name}</b>\n\n<b>Type</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\r<b>PV</b>: ${product.dn.pv}\n`;
+  //  console.log(r);
+  return r;
+};
+
 const telegram = (app: express.Application) => {
   const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
 
@@ -76,7 +82,7 @@ const telegram = (app: express.Application) => {
         break;
       case "Product": {
         const product = bot.getProductFromCache(text);
-        await bot.sendMessage(id, JSON.stringify(product));
+        await bot.sendMessage(id, parseProductInfo(product));
         bot.setClientState(id, "None");
         break;
       }
