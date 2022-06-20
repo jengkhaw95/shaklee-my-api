@@ -11,6 +11,7 @@ const telegram = (app: express.Application) => {
     if (req.method !== "POST") {
       return res.status(404);
     }
+    console.log(req.body);
     const {
       message: {
         text,

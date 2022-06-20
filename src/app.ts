@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import "dotenv/config";
 import express, {Application} from "express";
 import path from "path";
@@ -7,7 +8,7 @@ import telegram from "./router/telegram";
 const app: Application = express();
 
 const port = process.env.PORT || 3000;
-
+app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../docs/output")));
 
 // 3 is the number of proxy layer on Heroku
