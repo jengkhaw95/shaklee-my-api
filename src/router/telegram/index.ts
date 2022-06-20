@@ -9,7 +9,7 @@ const telegram = (app: express.Application) => {
 
   app.use("/telegram", async (req, res) => {
     if (req.method !== "POST") {
-      return res.status(404);
+      return res.status(404).send("Not found");
     }
     const {
       message: {
