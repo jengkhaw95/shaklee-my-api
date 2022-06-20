@@ -11,6 +11,9 @@ export class TelegramBot {
   private productCache: Map<string, any>;
   private clientStore: Map<number, ClientState>;
   constructor(apiKey: string) {
+    if (!apiKey) {
+      throw Error("Telegram Bot Token is missing");
+    }
     this.apiKey = apiKey;
     this.productCache = new Map<string, any>();
     this.clientStore = new Map<number, ClientState>();
@@ -41,6 +44,7 @@ export class TelegramBot {
     parseMode: ParseMode = "HTML",
     option?: any
   ) {
+    console.log("Sending message");
     return axios.get(this.getUrl("sendMessage"), {
       params: {chat_id: chatId, text, parse_mode: parseMode, ...option},
     });
@@ -58,6 +62,7 @@ export class TelegramBot {
       one_time_keyboard: true,
       selective: true,
     };
+    console.log("Sending buttons");
     return this.sendMessage(chatId, text, parseMode, {reply_markup});
   }
 }

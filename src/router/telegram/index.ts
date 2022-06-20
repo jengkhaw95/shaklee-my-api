@@ -85,7 +85,7 @@ const telegram = (app: express.Application) => {
         break;
     }
 
-    return res.status(200);
+    return res.status(200).send("ok");
   });
 };
 
