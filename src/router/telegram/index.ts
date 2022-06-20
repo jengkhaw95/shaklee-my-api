@@ -10,6 +10,10 @@ const parseProductInfo = (product: any) => {
   return r;
 };
 
+const randomizeMessage = (messages: Array<string>) => {
+  return messages[Math.floor(Math.random() * messages.length)];
+};
+
 const telegram = (app: express.Application) => {
   const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
   if (!process.env.TELEGRAM_BOT_TOKEN) {
@@ -31,7 +35,15 @@ const telegram = (app: express.Application) => {
 
     if (text === "/start") {
       bot.setClientState(id, "None");
-      bot.sendButtons(id, "How can I help", availableOptions);
+      bot.sendButtons(
+        id,
+        randomizeMessage([
+          "Hi, how may I help?",
+          "Do you need any help?",
+          "Aww, I was about to take a nap! What's your request?",
+        ]),
+        availableOptions
+      );
       return res.status(200).send("ok");
     }
 
@@ -40,7 +52,14 @@ const telegram = (app: express.Application) => {
         case "Search Product":
           {
             bot.setClientState(id, "Search");
-            await bot.sendMessage(id, "What are you looking for?");
+            await bot.sendMessage(
+              id,
+              randomizeMessage([
+                "What are you looking for?",
+                "Send me something to look for.",
+                "Tell me about it.",
+              ])
+            );
           }
 
           break;
