@@ -11,7 +11,6 @@ const telegram = (app: express.Application) => {
     if (req.method !== "POST") {
       return res.status(404);
     }
-    console.log(req.body);
     const {
       message: {
         text,
@@ -24,6 +23,7 @@ const telegram = (app: express.Application) => {
     if (text === "/start") {
       bot.setClientState(id, "None");
       bot.sendButtons(id, "How can I help", availableOptions);
+      return res.status(200).send("ok");
     }
 
     if (availableOptions.includes(text)) {
@@ -44,11 +44,13 @@ const telegram = (app: express.Application) => {
         default:
           break;
       }
+
+      return res.status(200).send("ok");
     }
 
     const clientState = bot.getClientState(id);
     if (!clientState) {
-      return res.status(200);
+      return res.status(200).send("ok");
     }
     switch (clientState) {
       case "Search":

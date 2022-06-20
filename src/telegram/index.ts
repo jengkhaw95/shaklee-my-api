@@ -53,7 +53,7 @@ export class TelegramBot {
     parseMode: ParseMode = "HTML"
   ) {
     const reply_markup = {
-      keyboard: [buttons.map((text) => [{text}])],
+      keyboard: buttons.map((text) => [{text}]),
       resize_keyboard: true,
       one_time_keyboard: true,
       selective: true,
