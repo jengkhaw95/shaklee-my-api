@@ -42,7 +42,7 @@ const telegram = (app: express.Application) => {
           "Do you need any help?",
           "Aww, I was about to take a nap! What's your request?",
         ]),
-        availableOptions
+        availableOptions.filter(text=>!text.startsWith("/"))
       );
       return res.status(200).send("ok");
     }
@@ -118,7 +118,13 @@ const telegram = (app: express.Application) => {
         break;
       }
 
-      default:
+      default: {
+        await bot.sendMessage(id, randomizeMessage([
+          "Seems like it's your first time here. Try /start to play with me.",
+          "Hi, please use /start to chat with me."
+        ]))
+        bot.setClientState(id, "None");
+      }
         break;
     }
 
