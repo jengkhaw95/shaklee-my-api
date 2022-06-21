@@ -105,7 +105,7 @@ const telegram = (app: express.Application) => {
             );
             bot.setClientState(id, "Product");
           } else {
-            await bot.sendMessage(id, `No product found for:\n${text}`);
+            await bot.sendMessage(id, `No product found for:\n${text}\nPlease try another word.`);
           }
         }
         break;
