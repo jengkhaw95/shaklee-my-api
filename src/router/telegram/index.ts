@@ -7,13 +7,13 @@ const availableOptions = ["Search Product", "Promotion", "/search", "/promotion"
 const parseProductStatus = (productStatus: string) => {
   switch (productStatus) {
     case "available":
-      return "<b>Available now!<b>";
+      return "<b>Available now!</b>";
     case "oos":
       return "<b>Currently Out-of-stock!</b>";
     case "promotion":
-      return "<b>This is a Promotion!<b>";
+      return "<b>This is a Promotion!</b>";
     case "archived":
-      return "<b>This is no longer available!<b>";
+      return "<b>This is no longer available!</b>";
     default:
       return "";
     }
@@ -21,7 +21,6 @@ const parseProductStatus = (productStatus: string) => {
 
 const parseProductInfo = (product: any) => {
   const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n\n<b>Status</b>: ${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
-  return parseProductStatus(product.status);
   //  console.log(r);
   return r;
 };
