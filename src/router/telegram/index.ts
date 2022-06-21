@@ -2,7 +2,7 @@ import express from "express";
 import {connectToDB} from "../../db";
 import {TelegramBot} from "../../telegram";
 
-const availableOptions = ["Search Product", "Promotion"];
+const availableOptions = ["Search Product", "Promotion", "/search", "/promotion"];
 
 const parseProductInfo = (product: any) => {
   const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n\n<b>Status</b>: ${product.status}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
@@ -49,6 +49,7 @@ const telegram = (app: express.Application) => {
 
     if (availableOptions.includes(text)) {
       switch (text) {
+        case "/search":
         case "Search Product":
           {
             bot.setClientState(id, "Search");
@@ -63,6 +64,7 @@ const telegram = (app: express.Application) => {
           }
 
           break;
+        case "/promotion":
         case "Promotion":
           {
           }
