@@ -67,6 +67,11 @@ const telegram = (app: express.Application) => {
         case "/promotion":
         case "Promotion":
           {
+            bot.setClientState(id, "None");
+            await bot.sendMessage(
+              id,
+              randomizeMessage(["This feature is in development.", "This is not available at the moment."])
+            )
           }
 
           break;
