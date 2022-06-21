@@ -19,8 +19,12 @@ const parseProductStatus = (productStatus: string) => {
     }
 }
 
+const stringSanitizer = (str: string) => {
+  return str.replace(/<[^>]*>/g, "")
+}
+
 const parseProductInfo = (product: any) => {
-  const r = `<b><a href='${product.images[0]}'>${product.name}</a></b>\n${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
+  const r = `<b><a href='${product.images[0]}'>${stringSanitizer(product.name)}</a></b>\n${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
   //  console.log(r);
   return r;
 };
