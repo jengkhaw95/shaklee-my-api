@@ -41,12 +41,16 @@ export class TelegramBot {
   async sendMessage(
     chatId: number,
     text: string,
-    parseMode: ParseMode = "HTML",
     option?: any
   ) {
+    // Remove keyboard by default
+    const reply_markup = {
+      remove_keyboard: true,
+      selective: true
+    };
     //console.log("Sending message");
     return axios.get(this.getUrl("sendMessage"), {
-      params: {chat_id: chatId, text, parse_mode: parseMode, ...option},
+      params: {chat_id: chatId, text, parse_mode: "HTML", reply_markup, ...option},
     });
   }
 
@@ -54,7 +58,6 @@ export class TelegramBot {
     chatId: number,
     text: string,
     buttons: Array<string>,
-    parseMode: ParseMode = "HTML"
   ) {
     const reply_markup = {
       keyboard: buttons.map((text) => [{text}]),
@@ -63,6 +66,6 @@ export class TelegramBot {
       selective: true,
     };
     //console.log("Sending buttons");
-    return this.sendMessage(chatId, text, parseMode, {reply_markup});
+    return this.sendMessage(chatId, text, {parse_mode: "HTML", reply_markup});
   }
 }

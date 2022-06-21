@@ -57,7 +57,7 @@ const telegram = (app: express.Application) => {
               id,
               randomizeMessage([
                 "What are you looking for?",
-                "Send me something to look for.",
+                "Send me something to search for.",
                 "Tell me about it.",
               ])
             );
@@ -111,7 +111,7 @@ const telegram = (app: express.Application) => {
         break;
       case "Product": {
         const product = bot.getProductFromCache(text);
-        await bot.sendMessage(id, parseProductInfo(product), "HTML", {
+        await bot.sendMessage(id, parseProductInfo(product), {
           disable_web_page_preview: false,
         });
         bot.setClientState(id, "None");
