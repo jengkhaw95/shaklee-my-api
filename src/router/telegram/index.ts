@@ -120,7 +120,7 @@ const telegram = (app: express.Application) => {
             await bot.sendButtons(
               id,
               `Found <b>${products.length}</b> result(s) for:\n${text}`,
-              products.map((prod) => prod.name)
+              products.map((prod) => stringSanitizer(prod.name))
             );
             bot.setClientState(id, "Product");
           } else {
