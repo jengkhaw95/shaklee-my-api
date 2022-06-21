@@ -116,7 +116,7 @@ const telegram = (app: express.Application) => {
 
           if (products.length) {
             // Set cache
-            products.map((prod) => bot.setProductCache(prod.name, prod));
+            products.map((prod) => bot.setProductCache(stringSanitizer(prod.name), prod));
             await bot.sendButtons(
               id,
               `Found <b>${products.length}</b> result(s) for:\n${text}`,
