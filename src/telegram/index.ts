@@ -2,7 +2,7 @@ import axios from "axios";
 
 type ClientState = "None" | "Search" | "Promotion" | "Product";
 type ParseMode = "MarkdownV2" | "HTML";
-type BotMethod = "sendMessage";
+type BotMethod = "sendMessage" | "sendPhoto";
 
 const baseUrl = "https://api.telegram.org/bot";
 
@@ -38,27 +38,25 @@ export class TelegramBot {
     return `${baseUrl}${this.apiKey}/${method}`;
   }
 
-  async sendMessage(
-    chatId: number,
-    text: string,
-    option?: any
-  ) {
+  async sendMessage(chatId: number, text: string, option?: any) {
     // Remove keyboard by default
     const reply_markup = {
       remove_keyboard: true,
-      selective: true
+      selective: true,
     };
     //console.log("Sending message");
     return axios.get(this.getUrl("sendMessage"), {
-      params: {chat_id: chatId, text, parse_mode: "HTML", reply_markup, ...option},
+      params: {
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        reply_markup,
+        ...option,
+      },
     });
   }
 
-  async sendButtons(
-    chatId: number,
-    text: string,
-    buttons: Array<string>,
-  ) {
+  async sendButtons(chatId: number, text: string, buttons: Array<string>) {
     const reply_markup = {
       keyboard: buttons.map((text) => [{text}]),
       resize_keyboard: true,
@@ -67,5 +65,22 @@ export class TelegramBot {
     };
     //console.log("Sending buttons");
     return this.sendMessage(chatId, text, {parse_mode: "HTML", reply_markup});
+  }
+  async sendImage(chatId: number, photo: string, option?: any) {
+    // Remove keyboard by default
+    const reply_markup = {
+      remove_keyboard: true,
+      selective: true,
+    };
+    //console.log("Sending message");
+    return axios.get(this.getUrl("sendPhoto"), {
+      params: {
+        chat_id: chatId,
+        photo,
+        parse_mode: "HTML",
+        reply_markup,
+        ...option,
+      },
+    });
   }
 }
