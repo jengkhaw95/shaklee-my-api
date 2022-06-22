@@ -131,7 +131,10 @@ const telegram = (app: express.Application) => {
         case "/announcement":
         case "Announcement":
           {
-            const banners = await db.collection("banners").find().toArray();
+            const banners = await db
+              .collection("banners")
+              .find({status: {$exists: false}})
+              .toArray();
             const promises = banners.map((b) =>
               bot.sendImage(id, b.images_url[0])
             );
