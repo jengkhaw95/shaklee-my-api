@@ -1,13 +1,13 @@
 import bodyParser from "body-parser";
 import "dotenv/config";
-import express, {Application} from "express";
+import express, { Application } from "express";
 import path from "path";
 import api from "./router/api";
 import telegram from "./router/telegram";
 
 const app: Application = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../docs/output")));
 
