@@ -2,7 +2,14 @@ import express from "express";
 import {connectToDB} from "../../db";
 import {TelegramBot} from "../../telegram";
 
-const availableOptions = ["Search Product", "Promotion", "/search", "/promotion"];
+const availableOptions = [
+  "Search Product",
+  "Promotion",
+  "Announcement",
+  "/search",
+  "/promotion",
+  "/announcement",
+];
 
 const parseProductStatus = (productStatus: string) => {
   switch (productStatus) {
@@ -16,15 +23,21 @@ const parseProductStatus = (productStatus: string) => {
       return "\n<b>This is no longer available!</b>\n";
     default:
       return "";
-    }
-}
+  }
+};
 
 const stringSanitizer = (str: string) => {
-  return str.replace(/<[^>]*>/g, "")
-}
+  return str.replace(/<[^>]*>/g, "");
+};
 
 const parseProductInfo = (product: any) => {
-  const r = `<b><a href='${product.images[0]}'>${stringSanitizer(product.name)}</a></b>\n${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${product.dn.price}\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${product.dn.uv}\n<b>PV</b>: ${product.dn.pv}\n`;
+  const r = `<b><a href='${product.images[0]}'>${stringSanitizer(
+    product.name
+  )}</a></b>\n${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${
+    product.dn.price
+  }\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${
+    product.dn.uv
+  }\n<b>PV</b>: ${product.dn.pv}\n`;
   //  console.log(r);
   return r;
 };
@@ -61,7 +74,7 @@ const telegram = (app: express.Application) => {
           "Do you need any help?",
           "Aww, I was about to take a nap! What's your request?",
         ]),
-        availableOptions.filter(text=>!text.startsWith("/"))
+        availableOptions.filter((text) => !text.startsWith("/"))
       );
       return res.status(200).send("ok");
     }
@@ -86,13 +99,48 @@ const telegram = (app: express.Application) => {
         case "/promotion":
         case "Promotion":
           {
-            bot.setClientState(id, "None");
-            await bot.sendMessage(
-              id,
-              randomizeMessage(["This feature is in development.", "This is not available at the moment."])
-            )
+            //bot.setClientState(id, "None");
+            //await bot.sendMessage(
+            //  id,
+            //  randomizeMessage(["This feature is in development.", "This is not available at the moment."])
+            //)
+
+            const products = await db
+              .collection("products")
+              .find({status: "promotion"})
+              .toArray();
+
+            if (products.length) {
+              // Set cache
+              products.map((prod) =>
+                bot.setProductCache(stringSanitizer(prod.name), prod)
+              );
+              await bot.sendButtons(
+                id,
+                `${products.length} Promotion(s) found.`,
+                products.map((prod) => stringSanitizer(prod.name))
+              );
+              bot.setClientState(id, "Product");
+            } else {
+              await bot.sendMessage(id, `No Promotion(s) found at the moment.`);
+            }
           }
 
+          break;
+
+        case "/announcement":
+        case "Announcement":
+          {
+            const banners = await db
+              .collection("banners")
+              .find({status: {$exists: false}})
+              .toArray();
+            const promises = banners.map((b) =>
+              bot.sendImage(id, b.images_url[0])
+            );
+            await Promise.all(promises);
+            bot.setClientState(id, "None");
+          }
           break;
 
         default:
@@ -116,7 +164,9 @@ const telegram = (app: express.Application) => {
 
           if (products.length) {
             // Set cache
-            products.map((prod) => bot.setProductCache(stringSanitizer(prod.name), prod));
+            products.map((prod) =>
+              bot.setProductCache(stringSanitizer(prod.name), prod)
+            );
             await bot.sendButtons(
               id,
               `Found <b>${products.length}</b> result(s) for:\n${text}`,
@@ -124,7 +174,10 @@ const telegram = (app: express.Application) => {
             );
             bot.setClientState(id, "Product");
           } else {
-            await bot.sendMessage(id, `No product found for:\n${text}\nPlease try another word.`);
+            await bot.sendMessage(
+              id,
+              `No product found for:\n${text}\nPlease try another word.`
+            );
           }
         }
         break;
@@ -137,13 +190,17 @@ const telegram = (app: express.Application) => {
         break;
       }
 
-      default: {
-        await bot.sendMessage(id, randomizeMessage([
-          "Seems like it's your first time here. Try /start to play with me.",
-          "Hi, please use /start to chat with me."
-        ]))
-        bot.setClientState(id, "None");
-      }
+      default:
+        {
+          await bot.sendMessage(
+            id,
+            randomizeMessage([
+              "Seems like it's your first time here. Try /start to play with me.",
+              "Hi, please use /start to chat with me.",
+            ])
+          );
+          bot.setClientState(id, "None");
+        }
         break;
     }
 

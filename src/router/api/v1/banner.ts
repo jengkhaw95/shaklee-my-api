@@ -8,6 +8,7 @@ const router = express.Router();
  * @apiName GetBanners
  * @apiGroup Banner
  * @apiVersion  1.0.0
+ * @apiQuery {string="archived"} [status] Banners status (Leave blank for non-archived banners)
  * @apiSuccess (200) {Boolean}  ok    Ok
  * @apiSuccess (200) {Object[]} data  Banners data
  * @apiSuccess (200) {Number}   count Banners count
@@ -33,8 +34,17 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    const q = req.query;
+    let temp: any = {};
+    if (!q.status) {
+      temp.status = {$exists: false};
+    } else {
+      temp.status = q.status;
+    }
+
+    const filter = Object.keys(temp).length ? temp : undefined;
     const db = await connectToDB();
-    const data = await db.collection("banners").find().toArray();
+    const data = await db.collection("banners").find(filter).toArray();
     const count = data.length;
     res.json({ok: true, data, count});
   } catch (error) {
