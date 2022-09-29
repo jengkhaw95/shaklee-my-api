@@ -9,7 +9,7 @@ import telegram from "./router/telegram";
 const app: Application = express();
 
 const host = process.env.host || "0.0.0.0";
-const port = process.env.$PORT || 5000;
+const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../docs/output")));
 
