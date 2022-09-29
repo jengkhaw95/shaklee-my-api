@@ -63,8 +63,6 @@ const telegram = (app: express.Application) => {
       },
     } = req.body;
 
-    console.log(req.body);
-
     const db = await connectToDB();
 
     if (text === "/start") {
