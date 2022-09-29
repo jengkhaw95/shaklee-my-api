@@ -1,15 +1,15 @@
 import bodyParser from "body-parser";
 import "dotenv/config";
-import express, { Application } from "express";
+import express, {Application} from "express";
 import path from "path";
-import { updateProductsAndBanners as cronUpdateProductsAndBanners } from "./cron/updateProductsAndBanners";
+import {updateProductsAndBanners as cronUpdateProductsAndBanners} from "./cron/updateProductsAndBanners";
 import api from "./router/api";
 import telegram from "./router/telegram";
 
 const app: Application = express();
 
 const host = process.env.host || "0.0.0.0";
-const port = process.env.PORT || 5000;
+const port = process.env.$PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../docs/output")));
 
