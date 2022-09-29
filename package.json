@@ -2,7 +2,7 @@
   "name": "shaklee-my-api",
   "version": "1.0.0",
   "description": "This is a non-official Shaklee Malaysia REST API for products/promotions",
-  "homepage": "https://shaklee-my-api.herokuapp.com",
+  "homepage": "https://shaklee-my-api.up.railway.app",
   "main": "dist/index.js",
   "private": true,
   "bugs": {
@@ -28,7 +28,7 @@
   "license": "MIT",
   "apidoc": {
     "title": "Shaklee Malaysia API",
-    "sampleUrl": "https://shaklee-my-api.herokuapp.com/api/v1",
+    "sampleUrl": "https://shaklee-my-api.up.railway.app/api/v1",
     "header": {
       "title": "Getting started",
       "filename": "./docs/header.md"
