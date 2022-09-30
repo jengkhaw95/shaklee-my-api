@@ -6,26 +6,31 @@ import {updateProductsAndBanners as cronUpdateProductsAndBanners} from "./cron/u
 import api from "./router/api";
 import telegram from "./router/telegram";
 
-const app: Application = express();
+try {
+  const app: Application = express();
 
-const port = process.env.PORT || 5000;
-app.use(bodyParser.json());
-app.use(express.static(path.resolve(__dirname, "../docs/output")));
+  const port = process.env.PORT || 5000;
+  app.use(bodyParser.json());
+  app.use(express.static(path.resolve(__dirname, "../docs/output")));
 
-// 3 is the number of proxy layer on Heroku
-// app.set("trust proxy", 3);
+  // 3 is the number of proxy layer on Heroku
+  // app.set("trust proxy", 3);
 
-telegram(app);
-api(app);
+  telegram(app);
+  api(app);
 
-// Used to check ip
-//app.get("/ip", (req, res) => {
-//  res.send(req.ip);
-//});
+  // Used to check ip
+  //app.get("/ip", (req, res) => {
+  //  res.send(req.ip);
+  //});
 
-app.listen(port as number, function () {
-  console.log(`App is listening on port: ${port}!`);
-});
+  app.listen(port as number, function () {
+    console.log(`App is listening on port: ${port}!`);
+  });
 
-// Set up cron scheduler
-cronUpdateProductsAndBanners.start();
+  // Set up cron scheduler
+  cronUpdateProductsAndBanners.start();
+} catch (error) {
+  console.log("Error");
+  console.log(error);
+}
