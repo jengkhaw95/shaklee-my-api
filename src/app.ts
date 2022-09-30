@@ -8,7 +8,6 @@ import telegram from "./router/telegram";
 
 const app: Application = express();
 
-const host = process.env.host || "127.0.0.1";
 const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, "../docs/output")));
@@ -24,8 +23,8 @@ api(app);
 //  res.send(req.ip);
 //});
 
-app.listen(port as number, host, function () {
-  console.log(`App is listening on ${host}:${port}!`);
+app.listen(port as number, function () {
+  console.log(`App is listening on port: ${port}!`);
 });
 
 // Set up cron scheduler
