@@ -6,7 +6,7 @@ Data return from API endpoint in this project can be publicly obtained in [offic
 
 ## Introduction
 
-This projects uses `Express` as a backend server to serve RESTful API for Shaklee Malaysia products.
+This projects uses `ExpressJS` as a backend server to serve RESTful API for Shaklee Malaysia products.
 
 ## Demo
 
