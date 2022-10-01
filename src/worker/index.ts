@@ -56,7 +56,6 @@ export const workerUpdateProducts = async () => {
       ts: Date.now(),
     });
   }
-  process.exit();
 };
 
 export const workerUpdateBanner = async () => {
@@ -104,5 +103,4 @@ export const workerUpdateBanner = async () => {
       ts: Date.now(),
     });
   }
-  process.exit();
 };

@@ -31,6 +31,6 @@ try {
   // Set up cron scheduler
   cronUpdateProductsAndBanners.start();
 } catch (error) {
-  console.log("Error");
+  console.log("Runtime error");
   console.log(error);
 }
