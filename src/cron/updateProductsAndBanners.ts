@@ -1,7 +1,7 @@
 import {cronJobOnEvery55thMinute} from ".";
 import {workerUpdateBanner, workerUpdateProducts} from "../worker";
 
-export const updateProductsAndBanners = cronJobOnEvery55thMinute(() => {
+export const updateProductsAndBanners = () => {
   console.log("Update cron started...");
   try {
     workerUpdateBanner();
@@ -11,4 +11,8 @@ export const updateProductsAndBanners = cronJobOnEvery55thMinute(() => {
     console.log(error);
   }
   console.log("Update cron completed!");
-});
+};
+
+export const cronUpdateProductsAndBanners = cronJobOnEvery55thMinute(
+  updateProductsAndBanners
+);

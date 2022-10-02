@@ -26,7 +26,10 @@ export const workerUpdateProducts = async () => {
   const productsToInsert = products.map((d) => ({...d, _id: d.product_no}));
 
   const outdatedProducts = await productCollection
-    .find({_id: {$nin: productsToInsert.map((d) => d._id)}})
+    .find({
+      _id: {$nin: productsToInsert.map((d) => d._id)},
+      status: {$ne: "archived"},
+    })
     .toArray();
 
   if (outdatedProducts.length) {
@@ -74,7 +77,10 @@ export const workerUpdateBanner = async () => {
   const bannersToInsert = banners.map((d) => ({...d, _id: d.name}));
 
   const outdatedBanners = await bannerCollection
-    .find({_id: {$nin: bannersToInsert.map((d) => d._id)}})
+    .find({
+      _id: {$nin: bannersToInsert.map((d) => d._id)},
+      status: {$ne: "archived"},
+    })
     .toArray();
 
   if (outdatedBanners.length) {

@@ -2,7 +2,10 @@ import bodyParser from "body-parser";
 import "dotenv/config";
 import express, {Application} from "express";
 import path from "path";
-import {updateProductsAndBanners as cronUpdateProductsAndBanners} from "./cron/updateProductsAndBanners";
+import {
+  cronUpdateProductsAndBanners,
+  updateProductsAndBanners,
+} from "./cron/updateProductsAndBanners";
 import api from "./router/api";
 import telegram from "./router/telegram";
 
@@ -29,7 +32,10 @@ try {
   });
 
   // Set up cron scheduler
-  cronUpdateProductsAndBanners.start();
+  //cronUpdateProductsAndBanners.start();
+  (async () => {
+    await updateProductsAndBanners();
+  })();
 } catch (error) {
   console.log("Runtime error");
   console.log(error);

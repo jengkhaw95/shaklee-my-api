@@ -19,6 +19,7 @@ export const connectToDB = async () => {
     await createInitialIndex(db);
     return db;
   }
+  console.log("Reusing db connection");
   return db;
 };
 
