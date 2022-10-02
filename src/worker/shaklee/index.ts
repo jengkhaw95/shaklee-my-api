@@ -3,7 +3,7 @@ import * as cheerio from "cheerio";
 import * as entities from "entities";
 
 const BASE_URL = "https://www.shaklee.com.my";
-const LOGIN_URL = "https://www.shaklee.com.my/login/submit";
+const LOGIN_URL = BASE_URL + "/login/submit";
 
 axios.defaults.withCredentials = true;
 
@@ -79,7 +79,6 @@ export default class Shaklee {
     // Login redirect success
     this.setCookieFromResponseHeaders(res.headers);
     this.isAuth = true;
-    console.log("Success!");
   }
 
   private setCookieFromResponseHeaders = (headers: AxiosResponseHeaders) => {

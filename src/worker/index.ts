@@ -30,6 +30,7 @@ export const workerUpdateProducts = async () => {
     .toArray();
 
   if (outdatedProducts.length) {
+    console.log(`Found ${outdatedProducts.length} outdated product(s)`);
     await productCollection.updateMany(
       {_id: {$in: outdatedProducts.map((d) => d._id)}},
       {$set: {status: "archived", lastUpdateAt: Date.now()}}
@@ -77,6 +78,7 @@ export const workerUpdateBanner = async () => {
     .toArray();
 
   if (outdatedBanners.length) {
+    console.log(`Found ${outdatedBanners.length} outdated banner(s)`);
     await bannerCollection.updateMany(
       {_id: {$in: outdatedBanners.map((d) => d._id)}},
       {$set: {status: "archived", lastUpdateAt: Date.now()}}
