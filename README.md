@@ -12,19 +12,26 @@ This projects uses `ExpressJS` as a backend server to serve RESTful API for Shak
 
 ~~This project is hosted on Heroku.~~
 
-This project is migrated to [Railway](https://railway.app/). [View Demo](https://shaklee-my-api.up.railway.app/)
+This project is migrated to [Railway](https://railway.app/).
 
-## How it works
+## What is this?
 
-As this project is non-official, all the data are acquired from Shaklee Malaysia website.
+This is a project built on top of the Shaklee Malaysia products. Core features:
 
-The project contains 2 parts:
+1. RESTful API
 
-### Server
+An ExpressJS powered backend to serve data such as `products` & `announcements`. [View API Docs](https://shaklee-my-api.up.railway.app/)
 
-The server is used to host the API endpoints. (possibly docs in future)
+2. Cron worker
 
-### Worker
+Workers are scheduled to keep the data synced with the Official Website.
 
-The worker is used to retrieve latest data externally in a reasonable interval of time.
-All the data are then stored in database (`Mongodb`).
+3. Telegram Bot
+
+A [telegram bot](https://t.me/ShakleeMYBot) that serves as a user-friendly interface for user to interacte with the data.
+
+## Tech stack
+
+- Server - `ExpressJS`
+- Database - `MongoDB`
+- Telegram API - `Telegram official API`
