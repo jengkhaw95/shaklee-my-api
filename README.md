@@ -18,15 +18,15 @@ This project is migrated to [Railway](https://railway.app/).
 
 This is a project built on top of the Shaklee Malaysia products. Core features:
 
-1. RESTful API
+### RESTful API
 
 An ExpressJS powered backend to serve data such as `products` & `announcements`. [View API Docs](https://shaklee-my-api.up.railway.app/)
 
-2. Cron worker
+### Cron worker
 
 Workers are scheduled to keep the data synced with the Official Website.
 
-3. Telegram Bot
+### Telegram Bot
 
 A [telegram bot](https://t.me/ShakleeMYBot) that serves as a user-friendly interface for user to interacte with the data.
 
