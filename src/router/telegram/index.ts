@@ -105,7 +105,7 @@ const telegram = async (app: express.Application) => {
       if (bot.isSubscriber(id)) {
         bot.sendMessage(
           id,
-          "You've already subscribed.\n/unsubcribe to unsubscribe."
+          "You've already subscribed.\n/unsubscribe to unsubscribe."
         );
       } else {
         const {acknowledged} = await db
