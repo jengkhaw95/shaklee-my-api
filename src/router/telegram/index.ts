@@ -200,10 +200,14 @@ const telegram = async (app: express.Application) => {
               .collection("banners")
               .find({status: {$exists: false}})
               .toArray();
-            const promises = banners.map((b) =>
-              bot.sendImage(id, b.images_url[0])
+            //const promises = banners.map((b) =>
+            //  bot.sendImage(id, b.images_url[0])
+            //);
+            //await Promise.all(promises);
+            await bot.sendGroupImages(
+              id,
+              banners.map((b) => b.images_url[0])
             );
-            await Promise.all(promises);
             bot.setClientState(id, "None");
           }
           break;

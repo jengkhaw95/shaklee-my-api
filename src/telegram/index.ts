@@ -2,7 +2,7 @@ import axios from "axios";
 
 type ClientState = "None" | "Search" | "Promotion" | "Product";
 type ParseMode = "MarkdownV2" | "HTML";
-type BotMethod = "sendMessage" | "sendPhoto" | "getUpdates";
+type BotMethod = "sendMessage" | "sendPhoto" | "getUpdates" | "sendMediaGroup";
 type SubscriptionTopic = "product" | "promotion";
 type SubscriptionTopics = SubscriptionTopic[];
 
@@ -37,6 +37,7 @@ interface TelegramMessage {
 }
 
 const baseUrl = "https://api.telegram.org/bot";
+const MAX_PHOTO_GROUP_COUNT = 10;
 
 export class TelegramBot {
   private apiKey: string;
@@ -136,6 +137,19 @@ export class TelegramBot {
         parse_mode: "HTML",
         reply_markup,
         ...option,
+      },
+    });
+  }
+
+  async sendGroupImages(chatId: number, photoUrls: string[]) {
+    const media = photoUrls
+      .map((photo) => ({type: "photo", media: photo}))
+      .slice(-MAX_PHOTO_GROUP_COUNT);
+    return axios.get(this.getUrl("sendMediaGroup"), {
+      params: {
+        chat_id: chatId,
+        media: JSON.stringify(media),
+        protect_content: true,
       },
     });
   }
