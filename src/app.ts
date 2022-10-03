@@ -1,5 +1,5 @@
-import bodyParser from "body-parser";
 import "dotenv/config";
+import bodyParser from "body-parser";
 import express, {Application} from "express";
 import path from "path";
 import {cronUpdateProductsAndBanners} from "./cron/updateProductsAndBanners";

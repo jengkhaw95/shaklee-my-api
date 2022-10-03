@@ -52,11 +52,7 @@ export const workerUpdateProducts = async () => {
     const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
 
     await logUpdatesToDb({
-      nInserted,
-      nMatched,
-      nModified,
-      nRemoved,
-      nUpserted,
+      ...res.result,
       ts: Date.now(),
     });
   }
@@ -103,11 +99,7 @@ export const workerUpdateBanner = async () => {
     const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
 
     await logUpdatesToDb({
-      nInserted,
-      nMatched,
-      nModified,
-      nRemoved,
-      nUpserted,
+      ...res.result,
       ts: Date.now(),
     });
   }

@@ -1,3 +1,4 @@
+import e from "express";
 import express from "express";
 import {connectToDB} from "../../db";
 import {TelegramBot} from "../../telegram";
@@ -9,6 +10,8 @@ const availableOptions = [
   "/search",
   "/promotion",
   "/announcement",
+  "/subscribe",
+  "/unsubscribe",
 ];
 
 const parseProductStatus = (productStatus: string) => {
@@ -46,22 +49,41 @@ const randomizeMessage = (messages: Array<string>) => {
   return messages[Math.floor(Math.random() * messages.length)];
 };
 
-const telegram = (app: express.Application) => {
-  const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
+const telegram = async (app: express.Application) => {
   if (!process.env.TELEGRAM_BOT_TOKEN) {
     console.warn("TELEGRAM BOT TOKEN is missing, webhook DID NOT register");
     return;
   }
+
+  const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
+
+  const db = await connectToDB();
+  const subscriptionIds = await db
+    .collection("subscriptions")
+    .find({})
+    .toArray();
+  bot.setSubscriber(subscriptionIds.map((d) => d.chatId));
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("Start polling");
+    bot.polls();
+  }
+
   app.use(`/telegram/${process.env.TELEGRAM_BOT_TOKEN}`, async (req, res) => {
     if (req.method !== "POST") {
       return res.status(404).send("Not found");
     }
     const {
       message: {
+        from: {is_bot},
         text,
         chat: {id},
       },
     } = req.body;
+
+    if (is_bot) {
+      return res.status(200).send("ok");
+    }
 
     const db = await connectToDB();
 
@@ -76,6 +98,49 @@ const telegram = (app: express.Application) => {
         ]),
         availableOptions.filter((text) => !text.startsWith("/"))
       );
+      return res.status(200).send("ok");
+    }
+
+    if (text === "/subscribe") {
+      if (bot.isSubscriber(id)) {
+        bot.sendMessage(
+          id,
+          "You've already subscribed.\n/unsubcribe to unsubscribe."
+        );
+      } else {
+        const {acknowledged} = await db
+          .collection("subscriptions")
+          .insertOne({chatId: id, createdAt: Date.now()});
+        if (acknowledged) {
+          bot.addSubscriber(id);
+          bot.sendMessage(
+            id,
+            "Successfully subscribed!\nYou will start receiving latest changes!"
+          );
+        } else {
+          bot.sendMessage(id, "Something went wrong. Please try again later.");
+        }
+      }
+      return res.status(200).send("ok");
+    }
+
+    if (text === "/unsubscribe") {
+      if (bot.isSubscriber(id)) {
+        const {acknowledged} = await db
+          .collection("subscriptions")
+          .deleteOne({chatId: id});
+        if (acknowledged) {
+          bot.removeSubscriber(id);
+          bot.sendMessage(id, "You have unsubscribed.");
+        } else {
+          bot.sendMessage(id, "Something went wrong. Please try again later.");
+        }
+      } else {
+        bot.sendMessage(
+          id,
+          "You are not subscribed.\n/subscribe to subscribe."
+        );
+      }
       return res.status(200).send("ok");
     }
 
