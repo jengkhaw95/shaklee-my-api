@@ -1,7 +1,6 @@
-import e from "express";
 import express from "express";
 import {connectToDB} from "../../db";
-import {TelegramBot} from "../../telegram";
+import {tbot as bot} from "../../telegram";
 
 const availableOptions = [
   "Search Product",
@@ -54,8 +53,8 @@ const telegram = async (app: express.Application) => {
     console.warn("TELEGRAM BOT TOKEN is missing, webhook DID NOT register");
     return;
   }
-
-  const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
+  //tbot
+  //const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN!);
 
   const db = await connectToDB();
   const subscriptionIds = await db
