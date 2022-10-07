@@ -3,6 +3,7 @@
 
 import "dotenv/config";
 import {connectToDB} from "../db";
+import {tbot} from "../telegram";
 import Shaklee from "./shaklee";
 
 const logUpdatesToDb = async (document: any) => {
@@ -25,28 +26,103 @@ export const workerUpdateProducts = async () => {
   // Handle products
   const productsToInsert = products.map((d) => ({...d, _id: d.product_no}));
 
-  const outdatedProducts = await productCollection
-    .find({
-      _id: {$nin: productsToInsert.map((d) => d._id)},
-      status: {$ne: "archived"},
-    })
-    .toArray();
+  const allProductsFromDatabase = await productCollection.find().toArray();
 
-  if (outdatedProducts.length) {
-    console.log(`Found ${outdatedProducts.length} outdated product(s)`);
-    await productCollection.updateMany(
-      {_id: {$in: outdatedProducts.map((d) => d._id)}},
-      {$set: {status: "archived", lastUpdateAt: Date.now()}}
-    );
-  }
+  const toAdd = productsToInsert.filter((p) => {
+    const isPass = !allProductsFromDatabase.some((pr) => pr._id === p._id);
+    //console.log(p.name, p._id, isPass);
+    return isPass;
+  });
 
-  const bulkWriteActions = productsToInsert.map((p) => ({
-    replaceOne: {filter: {_id: p._id}, replacement: p, upsert: true},
+  const {toArchive, toUpdate} = allProductsFromDatabase.reduce<{
+    toArchive: any[];
+    toUpdate: any[];
+  }>(
+    (a, b) => {
+      const matchedItem = productsToInsert.find((bn) => bn._id === b._id);
+      if (!matchedItem) {
+        if (b.status !== "archived") {
+          a.toArchive.push(b);
+        }
+        return a;
+      }
+      let isToBeModify = false;
+      for (let k in Object.keys(b)) {
+        const v1 = b[k];
+        const v2 = matchedItem[k];
+        if (typeof v1 == "object") {
+          if (JSON.stringify(v1) !== JSON.stringify(v2)) {
+            isToBeModify = true;
+            break;
+          }
+        } else {
+          if (v1 !== v2) {
+            isToBeModify = true;
+            break;
+          }
+        }
+      }
+      if (isToBeModify) {
+        a.toUpdate.push(b);
+      }
+      return a;
+    },
+    {toArchive: [], toUpdate: []}
+  );
+
+  const updateMany = {
+    filter: {_id: {$nin: toArchive.map((d) => d._id)}},
+    update: {$set: {status: "archived", lastUpdateAt: Date.now()}},
+  };
+
+  const replaceMany = toUpdate.map((up) => ({
+    replaceOne: {
+      filter: {_id: up._id},
+      replacement: up,
+    },
   }));
 
-  const res = await productCollection.bulkWrite(bulkWriteActions, {
+  const insertMany = toAdd.map((ad) => ({
+    insertOne: {
+      document: ad,
+    },
+  }));
+
+  const bulkWriteOperations: any[] = [...replaceMany, ...insertMany];
+  if (toArchive.length) {
+    bulkWriteOperations.push({updateMany});
+  }
+
+  if (!bulkWriteOperations.length) {
+    console.log("No changes in products found!");
+    return;
+  }
+  const res = await productCollection.bulkWrite(bulkWriteOperations, {
     ordered: false,
   });
+
+  //const outdatedProducts = await productCollection
+  //  .find({
+  //    _id: {$nin: productsToInsert.map((d) => d._id)},
+  //    status: {$ne: "archived"},
+  //  })
+  //  .toArray();
+
+  //if (outdatedProducts.length) {
+  //  console.log(`Found ${outdatedProducts.length} outdated product(s)`);
+  //  await productCollection.updateMany(
+  //    {_id: {$in: outdatedProducts.map((d) => d._id)}},
+  //    {$set: {status: "archived", lastUpdateAt: Date.now()}}
+  //  );
+  //}
+
+  //const bulkWriteActions = productsToInsert.map((p) => ({
+  //  replaceOne: {filter: {_id: p._id}, replacement: p, upsert: true},
+  //}));
+
+  //const res = await productCollection.bulkWrite(bulkWriteActions, {
+  //  ordered: false,
+  //});
 
   if (res.result.ok) {
     const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
@@ -55,6 +131,16 @@ export const workerUpdateProducts = async () => {
       ...res.result,
       ts: Date.now(),
     });
+
+    const subscriptionIds = await db
+      .collection("subscriptions")
+      .find({})
+      .toArray();
+
+    await tbot.broadcast(
+      subscriptionIds.map((d) => d.chatId),
+      `<code>${JSON.stringify(res.result)}</code>`
+    );
   }
 };
 
@@ -102,5 +188,15 @@ export const workerUpdateBanner = async () => {
       ...res.result,
       ts: Date.now(),
     });
+
+    //const subscriptionIds = await db
+    //  .collection("subscriptions")
+    //  .find({})
+    //  .toArray();
+
+    //await tbot.broadcast(
+    //  subscriptionIds.map((d) => d.chatId),
+    //  `<code>${JSON.stringify(res.result)}</code>`
+    //);
   }
 };
