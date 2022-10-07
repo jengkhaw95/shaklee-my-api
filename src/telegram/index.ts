@@ -93,6 +93,24 @@ export class TelegramBot {
     return `${baseUrl}${this.apiKey}/${method}`;
   }
 
+  async broadcast(audienceIds: number[], textHTML: string) {
+    const reply_markup = {
+      remove_keyboard: true,
+      selective: true,
+    };
+    const promises = audienceIds.map((chat_id) =>
+      axios.get(this.getUrl("sendMessage"), {
+        params: {
+          chat_id,
+          text: textHTML,
+          parse_mode: "HTML",
+          reply_markup,
+        },
+      })
+    );
+    return Promise.all(promises);
+  }
+
   private getUpdates() {
     return axios.get(this.getUrl("getUpdates"));
   }
@@ -177,9 +195,9 @@ export class TelegramBot {
   }
 
   polls() {
-    if (!this.pollingInterval) {
-      this.pollingInterval = setInterval(this.pollingTask.bind(this), 2000);
-    }
+    //if (!this.pollingInterval) {
+    //  this.pollingInterval = setInterval(this.pollingTask.bind(this), 2000);
+    //}
   }
 
   private killPolling() {
@@ -187,3 +205,8 @@ export class TelegramBot {
     clearInterval(this.pollingInterval);
   }
 }
+
+if (!process.env.TELEGRAM_BOT_TOKEN) {
+  throw "TELEGRAM BOT TOKEN is missing";
+}
+export const tbot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
