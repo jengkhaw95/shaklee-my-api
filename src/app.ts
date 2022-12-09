@@ -2,7 +2,10 @@ import "dotenv/config";
 import bodyParser from "body-parser";
 import express, {Application} from "express";
 import path from "path";
-import {cronUpdateProductsAndBanners} from "./cron/updateProductsAndBanners";
+import {
+  cronUpdateProductsAndBanners,
+  updateProductsAndBanners,
+} from "./cron/updateProductsAndBanners";
 import api from "./router/api";
 import telegram from "./router/telegram";
 
@@ -27,6 +30,9 @@ try {
   app.listen(port as number, function () {
     console.log(`App is listening on port: ${port}!`);
   });
+
+  // Run right after app is deployed once
+  updateProductsAndBanners();
 
   // Set up cron scheduler
   cronUpdateProductsAndBanners.start();

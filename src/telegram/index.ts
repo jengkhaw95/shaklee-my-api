@@ -39,7 +39,7 @@ interface TelegramMessage {
 const baseUrl = "https://api.telegram.org/bot";
 const MAX_PHOTO_GROUP_COUNT = 10;
 
-export class TelegramBot {
+class TelegramBot {
   private apiKey: string;
   private productCache: Map<string, any>;
   private chatIdSet: Set<number>;
@@ -85,6 +85,7 @@ export class TelegramBot {
   getClientState(id: number) {
     return this.clientStore.get(id);
   }
+
   setClientState(id: number, state: ClientState) {
     this.clientStore.set(id, state);
   }
