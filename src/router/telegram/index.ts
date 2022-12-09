@@ -32,15 +32,26 @@ const stringSanitizer = (str: string) => {
   return str.replace(/<[^>]*>/g, "");
 };
 
-const parseProductInfo = (product: any) => {
-  const r = `<b><a href='${product.images[0]}'>${stringSanitizer(
+export const parseProductInfo = (
+  product: any,
+  isBroadcast: boolean = false
+) => {
+  let r = "";
+  if (isBroadcast) {
+    r += "<b>New product detected</b>\n\n";
+  }
+  r = `<b><a href='${product.images[0]}'>${stringSanitizer(
     product.name
   )}</a></b>\n${parseProductStatus(product.status)}\n<b>Member Price</b>: RM${
     product.dn.price
   }\n<b>Retail Price</b>: RM${product.srp.price}\n<b>UV</b>: ${
     product.dn.uv
   }\n<b>PV</b>: ${product.dn.pv}\n`;
-  //  console.log(r);
+
+  if (isBroadcast) {
+    r +=
+      "\nIf you do not wish to receive updates, you can /unsubscribe anytime.\n";
+  }
   return r;
 };
 
@@ -114,7 +125,7 @@ const telegram = async (app: express.Application) => {
           bot.addSubscriber(id);
           bot.sendMessage(
             id,
-            "Successfully subscribed!\nYou will start receiving latest changes!"
+            "Successfully subscribed!\nYou will start receiving latest updates!"
           );
         } else {
           bot.sendMessage(id, "Something went wrong. Please try again later.");

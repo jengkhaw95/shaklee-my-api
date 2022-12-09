@@ -3,6 +3,7 @@
 
 import "dotenv/config";
 import {connectToDB} from "../db";
+import {parseProductInfo} from "../router/telegram";
 import {tbot} from "../telegram";
 import Shaklee from "./shaklee";
 
@@ -136,6 +137,16 @@ export const workerUpdateProducts = async () => {
       .collection("subscriptions")
       .find({})
       .toArray();
+
+    if (toAdd.length) {
+      const promises = toAdd.map((product) =>
+        tbot.broadcast(
+          subscriptionIds.map((d) => d.chatId),
+          parseProductInfo(product, true)
+        )
+      );
+      await Promise.all(promises);
+    }
 
     await tbot.broadcast(
       subscriptionIds.map((d) => d.chatId),
