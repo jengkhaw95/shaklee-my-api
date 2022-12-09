@@ -56,6 +56,8 @@ class TelegramBot {
     this.productCache = new Map<string, any>();
     this.clientStore = new Map<number, ClientState>();
     this.chatIdSet = new Set();
+
+    console.log("Telegram bot instantiated");
   }
 
   setSubscriber(chatIds: number[] = []) {
