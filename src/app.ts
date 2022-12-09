@@ -18,7 +18,10 @@ try {
 
   // 3 is the number of proxy layer on Heroku
   // app.set("trust proxy", 3);
-
+  app.use((req, _, next) => {
+    console.log(`${req.method} ${req.originalUrl}`);
+    next();
+  });
   telegram(app);
   api(app);
 
@@ -32,7 +35,9 @@ try {
   });
 
   // Run right after app is deployed once
-  updateProductsAndBanners();
+  if (process.env.NODE_ENV !== "development") {
+    updateProductsAndBanners();
+  }
 
   // Set up cron scheduler
   cronUpdateProductsAndBanners.start();
