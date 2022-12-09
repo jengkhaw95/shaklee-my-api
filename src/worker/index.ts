@@ -139,6 +139,7 @@ export const workerUpdateProducts = async () => {
       .toArray();
 
     if (toAdd.length) {
+      console.table([toAdd]);
       const promises = toAdd.map((product) =>
         tbot.broadcast(
           subscriptionIds.map((d) => d.chatId),
