@@ -4,4 +4,5 @@ import {updateProductsAndBanners} from "../cron/updateProductsAndBanners";
 
 (async () => {
   await updateProductsAndBanners();
+  process.exit();
 })();

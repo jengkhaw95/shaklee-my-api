@@ -18,7 +18,6 @@ export const updateProductsAndBanners = async () => {
   }
   console.timeEnd("Cron");
 
-  process.exit();
 };
 
 export const cronUpdateProductsAndBanners = cronJobOnEvery3HoursAt55thMinute(
