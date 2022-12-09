@@ -28,7 +28,7 @@ Workers are scheduled to keep the data synced with the Official Website.
 
 ### Telegram Bot
 
-A [telegram bot](https://t.me/ShakleeMYBot) that serves as a user-friendly interface for user to interacte with the data.
+A [telegram bot](https://t.me/ShakleeMYBot) that serves as a Q&A interface for user to interact with the data.
 
 ## Tech stack
 
