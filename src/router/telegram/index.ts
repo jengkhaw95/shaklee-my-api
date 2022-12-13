@@ -34,11 +34,25 @@ const stringSanitizer = (str: string) => {
 
 export const parseProductInfo = (
   product: any,
-  isBroadcast: boolean = false
+  broadcastType?: "new" | "oos" | "promotion" | "archived"
 ) => {
   let r = "";
-  if (isBroadcast) {
-    r += "<b>New product detected</b>\n\n";
+  switch (broadcastType) {
+    case "new":
+      r += "<b>New product found</b>\n\n";
+      break;
+    case "oos":
+      r += "<b>Product out-of-stock!</b>\n\n";
+      break;
+    case "promotion":
+      r += "<b>New promotion found</b>\n\n";
+      break;
+    case "archived":
+      r += "<b>Product removed</b>\n\n";
+      break;
+
+    default:
+      break;
   }
   r = `<b><a href='${product.images[0]}'>${stringSanitizer(
     product.name
@@ -48,7 +62,7 @@ export const parseProductInfo = (
     product.dn.uv
   }\n<b>PV</b>: ${product.dn.pv}\n`;
 
-  if (isBroadcast) {
+  if (broadcastType) {
     r +=
       "\nIf you do not wish to receive updates, you can /unsubscribe anytime.\n";
   }

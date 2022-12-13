@@ -265,16 +265,45 @@ export const workerUpdateProducts = async () => {
       .find({})
       .toArray();
 
-    //if (toAdd.length) {
-    //  console.table([toAdd]);
-    //  const promises = toAdd.map((product) =>
-    //    tbot.broadcast(
-    //      subscriptionIds.map((d) => d.chatId),
-    //      parseProductInfo(product, true)
-    //    )
-    //  );
-    //  await Promise.all(promises);
-    //}
+    if (newProducts.length) {
+      const promises = newProducts.map((product) =>
+        tbot.broadcast(
+          subscriptionIds.map((d) => d.chatId),
+          parseProductInfo(product, "new")
+        )
+      );
+      await Promise.all(promises);
+    }
+
+    if (oosProducts.length) {
+      const promises = oosProducts.map((product) =>
+        tbot.broadcast(
+          subscriptionIds.map((d) => d.chatId),
+          parseProductInfo(product, "oos")
+        )
+      );
+      await Promise.all(promises);
+    }
+
+    if (promotionProducts.length) {
+      const promises = promotionProducts.map((product) =>
+        tbot.broadcast(
+          subscriptionIds.map((d) => d.chatId),
+          parseProductInfo(product, "promotion")
+        )
+      );
+      await Promise.all(promises);
+    }
+
+    if (toArchive_.length) {
+      const promises = toArchive_.map((product) =>
+        tbot.broadcast(
+          subscriptionIds.map((d) => d.chatId),
+          parseProductInfo(product, "archived")
+        )
+      );
+      await Promise.all(promises);
+    }
 
     await tbot.broadcast(
       subscriptionIds.map((d) => d.chatId),
