@@ -1,4 +1,4 @@
-import axios, {AxiosResponseHeaders} from "axios";
+import axios, { AxiosResponseHeaders } from "axios";
 import * as cheerio from "cheerio";
 import * as entities from "entities";
 
@@ -26,9 +26,10 @@ export default class Shaklee {
     this.isAuth = false;
   }
 
-  private async init() {
-    await this.getCSRFToken();
-    await this.getCookies();
+  async init() {
+    const token = await this.getCSRFToken();
+    const cookie = await this.getCookies();
+    return { token, cookie };
   }
 
   private reset() {
@@ -47,6 +48,7 @@ export default class Shaklee {
       throw Error("Couldn't get csrf-token");
     }
     this.token = token!;
+    return this.token;
   }
 
   private async getCookies() {
@@ -79,13 +81,14 @@ export default class Shaklee {
     // Login redirect success
     this.setCookieFromResponseHeaders(res.headers);
     this.isAuth = true;
+    return this.cookie;
   }
 
   private setCookieFromResponseHeaders = (headers: AxiosResponseHeaders) => {
     this.cookie = headers["set-cookie"]?.map((c) => c.split(";")[0]).join("; ");
   };
 
-  private objectToQueryString(obj: {[key: string]: any}) {
+  private objectToQueryString(obj: { [key: string]: any }) {
     const res: string[] = [];
     for (let i in obj) {
       let k = encodeURIComponent(i);

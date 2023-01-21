@@ -1,6 +1,8 @@
 node_modules
 dist
+.next
 
 docs/output
 
 .env
+.env.local
