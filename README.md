@@ -12,9 +12,9 @@ It is now under a migration progress to serving RESTful API with serverless func
 
 ### Migration Progress
 
-[x] Convert all `cron jobs` into `Queue` which is supported by `Upstash`'s `Qstash` feature.
-[ ] Convert Telegram webhook API endpoint for serverless function
-[ ] RESTful API for `products` & `banners`
+- [x] Convert all `cron jobs` into `Queue` which is supported by `Upstash`'s `Qstash` feature.
+- [ ] Convert Telegram webhook API endpoint for serverless function
+- [ ] RESTful API for `products` & `banners`
 
 ## Introduction
 
