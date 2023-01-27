@@ -4,15 +4,19 @@ This project is not affiliated, associated, authorized, endorsed by, or in any w
 
 Data return from API endpoint in this project can be publicly obtained in [official website](https://www.shaklee.com.my/). However, they are the property of Shaklee Products (Malaysia) Sdn. Bhd. or Shaklee Corporation.
 
-## Introduction
+<!--## Introduction
 
 This projects uses `ExpressJS` as a backend server to serve RESTful API for Shaklee Malaysia products.
+
+This project serves `products` & `banners` using serverless function.
 
 ## Demo
 
 ~~This project is hosted on Heroku.~~
 
-This project is migrated to [Railway](https://railway.app/).
+~~his project is migrated to Railway.~~
+
+This project is now hosted on [Vercel](https://vercel.com/)
 
 ## What is this?
 
@@ -34,4 +38,4 @@ A [telegram bot](https://t.me/ShakleeMYBot) that serves as a Q&A interface for u
 
 - Server - `ExpressJS`
 - Database - `MongoDB`
-- Telegram API - `Telegram official API`
+- Telegram API - `Telegram official API`-->
