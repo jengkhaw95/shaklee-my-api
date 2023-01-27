@@ -15,21 +15,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.timeEnd("get meta");
 
   //   fetch
-  //   const r = await fetch(
-  //     process.env.QSTASH_URL! +
-  //       "https://shaklee-my-api.vercel.app/api/cron/update-product",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }
-  //   );
+  const r = await fetch(
+    process.env.QSTASH_URL! +
+      "https://shaklee-my-api.vercel.app/api/cron/update-product",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
-  //   const d = await r.json();
-  //   console.log({ d });
+  const d = await r.json();
+  console.log({ d });
   return res.json({ ok: true, data });
   //   return res.status(500).json({});
   //
