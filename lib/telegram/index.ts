@@ -39,6 +39,17 @@ interface TelegramMessage {
 const baseUrl = "https://api.telegram.org/bot";
 const MAX_PHOTO_GROUP_COUNT = 10;
 
+export const availableOptions = [
+  "Search Product",
+  "Promotion",
+  "Announcement",
+  "/search",
+  "/promotion",
+  "/announcement",
+  "/subscribe",
+  "/unsubscribe",
+];
+
 class TelegramBot {
   private apiKey: string;
   private productCache: Map<string, any>;
@@ -137,12 +148,12 @@ class TelegramBot {
 
   async sendButtons(chatId: number, text: string, buttons: Array<string>) {
     const reply_markup = {
-      keyboard: buttons.map((text) => [{ text }]),
+      keyboard: buttons.map((text) => [{text}]),
       resize_keyboard: true,
       one_time_keyboard: true,
       selective: true,
     };
-    return this.sendMessage(chatId, text, { parse_mode: "HTML", reply_markup });
+    return this.sendMessage(chatId, text, {parse_mode: "HTML", reply_markup});
   }
 
   async sendImage(chatId: number, photo: string, option?: any) {
@@ -164,7 +175,7 @@ class TelegramBot {
 
   async sendGroupImages(chatId: number, photoUrls: string[]) {
     const media = photoUrls
-      .map((photo) => ({ type: "photo", media: photo }))
+      .map((photo) => ({type: "photo", media: photo}))
       .slice(-MAX_PHOTO_GROUP_COUNT);
     return axios.get(this.getUrl("sendMediaGroup"), {
       params: {
@@ -176,8 +187,8 @@ class TelegramBot {
   }
 
   private async pollingTask() {
-    const { data } = await this.getUpdates();
-    const { ok, result } = data;
+    const {data} = await this.getUpdates();
+    const {ok, result} = data;
     if (!ok) {
       this.killPolling();
       return;

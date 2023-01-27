@@ -1,15 +1,4 @@
-const availableOptions = [
-  "Search Product",
-  "Promotion",
-  "Announcement",
-  "/search",
-  "/promotion",
-  "/announcement",
-  "/subscribe",
-  "/unsubscribe",
-];
-
-const parseProductStatus = (productStatus: string) => {
+export const parseProductStatus = (productStatus: string) => {
   switch (productStatus) {
     case "available":
       return "\n<b>Available now!</b>\n";
@@ -24,7 +13,7 @@ const parseProductStatus = (productStatus: string) => {
   }
 };
 
-const stringSanitizer = (str: string) => {
+export const stringSanitizer = (str: string) => {
   return str.replace(/<[^>]*>/g, "");
 };
 
@@ -65,6 +54,6 @@ export const parseProductInfo = (
   return r;
 };
 
-const randomizeMessage = (messages: Array<string>) => {
+export const randomizeMessage = (messages: Array<string>) => {
   return messages[Math.floor(Math.random() * messages.length)];
 };

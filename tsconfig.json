@@ -91,12 +91,14 @@
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "paths": {
+      "@/lib/*":["./lib/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "lib/**/*.ts",
-    "src/worker/*.ts",
     "**/*.tsx",
     "jest.setup.js",
     "pages/test.txs"
