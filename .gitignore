@@ -2,7 +2,8 @@ node_modules
 dist
 .next
 
-docs/output
+docs/*
+!docs/header.md
 
 .env
 .env.*
