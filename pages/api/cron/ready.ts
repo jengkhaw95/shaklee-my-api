@@ -29,17 +29,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   );
 
+  const d = await r.json();
+  console.log({ d });
   if (r.ok) {
     return res.json({ ok: true });
   }
-  return res.status(500).json({});
+  //   return res.status(500).json({});
   //
 
   //   console.time("get product");
   //   const d = await h.getProducts(data.cookie, data.token);
   //   console.timeEnd("get product");
 
-  //   return res.json({ d });
+  return res.json({ d });
 };
 
 export default verifySignature(handler);
