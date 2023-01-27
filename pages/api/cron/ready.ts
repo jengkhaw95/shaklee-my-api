@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //       method: "POST",
   //       headers: {
   //         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
-  //         "content-type": "Application/json",
+  //         "Content-Type": "application/json",
   //       },
   //       body: JSON.stringify(data),
   //     }
@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   //   const d = await r.json();
   //   console.log({ d });
-  return res.json({ ok: true });
+  return res.json({ ok: true, data });
   //   return res.status(500).json({});
   //
 
@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   return res.json({ d });
 };
 
-export default verifySignature(handler);
+export default handler;
 
 export const config = {
   api: {

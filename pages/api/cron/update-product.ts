@@ -11,9 +11,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     password: process.env.SHAKLEE_PW!,
   });
 
-  console.time("get meta");
+  console.log(req.body);
+  console.time("get products");
   const data = await s.getProducts(req.body.cookie, req.body.token);
-  console.timeEnd("get meta");
+  console.timeEnd("get products");
 
   res.json({ ok: true, body: req.body, data });
 };
