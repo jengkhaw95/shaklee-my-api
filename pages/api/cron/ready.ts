@@ -1,4 +1,3 @@
-import { log } from "console";
 import { NextApiRequest, NextApiResponse } from "next";
 import Shaklee from "../../../src/worker/shaklee";
 import { verifySignature } from "@upstash/qstash/nextjs";
@@ -16,24 +15,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.timeEnd("get meta");
 
   //   fetch
-  const r = await fetch(
-    process.env.QSTASH_URL! +
-      "https://shaklee-my-api.vercel.app/api/cron/update-product",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
-        "content-type": "Application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
+  //   const r = await fetch(
+  //     process.env.QSTASH_URL! +
+  //       "https://shaklee-my-api.vercel.app/api/cron/update-product",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
+  //         "content-type": "Application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     }
+  //   );
 
-  const d = await r.json();
-  console.log({ d });
-  if (r.ok) {
-    return res.json({ ok: true });
-  }
+  //   const d = await r.json();
+  //   console.log({ d });
+  return res.json({ ok: true });
   //   return res.status(500).json({});
   //
 
@@ -41,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   const d = await h.getProducts(data.cookie, data.token);
   //   console.timeEnd("get product");
 
-  return res.json({ d });
+  //   return res.json({ d });
 };
 
 export default verifySignature(handler);
