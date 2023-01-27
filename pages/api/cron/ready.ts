@@ -18,12 +18,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   fetch
   const r = await fetch(
     process.env.QSTASH_URL! +
-      "https://shaklee-my-api.vercel.app/api/cron/ready",
+      "https://shaklee-my-api.vercel.app/api/cron/update-product",
     {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
+        "content-type": "Application/json",
       },
+      body: JSON.stringify(data),
     }
   );
 

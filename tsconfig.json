@@ -96,7 +96,7 @@
   "include": [
     "next-env.d.ts",
     "src/worker/*.ts",
-    // "**/*.tsx",
+    "**/*.tsx",
     "jest.setup.js",
     "pages/test.txs"
   ],
