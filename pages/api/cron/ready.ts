@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Shaklee from "../../../src/worker/shaklee";
 import { verifySignature } from "@upstash/qstash/nextjs";
+import Shaklee from "../../../lib/shaklee";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   req.statusCode = 200;
