@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //   return res.json({ d });
 };
 
-export default handler;
+export default verifySignature(handler);
 
 export const config = {
   api: {
