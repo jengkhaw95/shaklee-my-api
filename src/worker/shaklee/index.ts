@@ -108,8 +108,9 @@ export default class Shaklee {
     return url;
   };
 
-  async getProducts() {
-    if (!this.isAuth) {
+  async getProducts(cookie?: string, token?: string) {
+    if (!(cookie && token) && !this.isAuth) {
+      console.log("AUTHing");
       await this.init();
     }
     try {
@@ -131,9 +132,9 @@ export default class Shaklee {
         qs,
         {
           headers: {
-            "x-csrf-token": this.token!,
+            "x-csrf-token": token || this.token!,
             "Content-Type": "application/x-www-form-urlencoded",
-            cookie: this.cookie!,
+            cookie: cookie || this.cookie!,
           },
         }
       );
