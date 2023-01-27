@@ -20,7 +20,7 @@
     "worker:banner": "node dist/worker/banner.js",
     "cron": "ts-node src/script/runCron.ts",
     "dev": "next dev",
-    "build": "pnpm run build:docs && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
