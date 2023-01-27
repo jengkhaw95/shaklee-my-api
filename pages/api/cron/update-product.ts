@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { workerUpdateProducts } from "../../../src/worker";
 import { verifySignature } from "@upstash/qstash/nextjs";
-import Shaklee from "../../../src/worker/shaklee";
+import Shaklee from "../../../lib/shaklee";
+import { workerUpdateProducts } from "../../../lib/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   req.statusCode = 200;
@@ -11,12 +11,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     password: process.env.SHAKLEE_PW!,
   });
 
-  console.log(req.body);
   console.time("get products");
   const data = await s.getProducts(req.body.cookie, req.body.token);
   console.timeEnd("get products");
 
-  res.json({ ok: true, body: req.body, data });
+  console.time("update products");
+  await workerUpdateProducts(data);
+  console.timeEnd("update products");
+
+  res.json({ ok: true });
 };
 
 export default verifySignature(handler);
