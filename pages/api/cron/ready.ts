@@ -16,8 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   //   fetch
 
-  const url =
-    process.env.QSTASH_URL! +
+  const url = `${process.env.QSTASH_URL!}https://${
+    process.env.VERCEL_URL
+  }/api/cron/update-product`;
+  process.env.QSTASH_URL! +
     "https://shaklee-my-api.vercel.app/api/cron/update-product";
 
   const headers = {
@@ -28,21 +30,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = JSON.stringify(data);
 
   console.log({ url, headers, body });
-  //   const r = await fetch(
-  //     process.env.QSTASH_URL! +
-  //       "https://shaklee-my-api.vercel.app/api/cron/update-product",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }
-  //   );
+  const r = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data),
+  });
 
-  //   const d = await r.json();
-  //   console.log({ d });
+  const d = await r.json();
+  console.log({ d });
   return res.json({ ok: true, data });
   //   return res.status(500).json({});
   //
