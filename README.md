@@ -12,11 +12,10 @@ It is now under a migration progress to serving RESTful API with serverless func
 
 ### Migration Progress
 
-- [x] Convert all `cron jobs` into `Queue` which is supported by `Upstash`'s `Qstash` feature.
-- [x] RESTful API for `products` & `banners`
+- [x] API endpoints for `products` & `banners`
 - [x] Convert Telegram webhook API endpoint for serverless function
-- [x] Add caching & ratelimit for /GET endpoint
-- [ ] Use redis to store telegram client state
+- [x] Use `Qstash`from `Upstash` for cron/queue jobs
+- [x] Use `Redis` for caching & ratelimit for /GET endpoints
 - [ ] Static API Docs serving
 
 ## Introduction

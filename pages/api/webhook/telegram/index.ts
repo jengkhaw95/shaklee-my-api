@@ -1,10 +1,18 @@
 import {connectToDB} from "../../../../lib/db";
+import {redis} from "../../../../lib/redis";
 import {availableOptions, tbot as bot} from "../../../../lib/telegram";
 import {
   parseProductInfo,
   randomizeMessage,
   stringSanitizer,
 } from "../../../../lib/util";
+
+//async function setClientState(clientId: string, clientState: ClientState) {
+//  return await redis.set(`clientState:${clientId}`, clientState);
+//}
+//async function getClientState(clientId: string) {
+//  return await redis.get(`clientState:${clientId}`);
+//}
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
@@ -98,12 +106,6 @@ const handler = async (req, res) => {
       case "/promotion":
       case "Promotion":
         {
-          //bot.setClientState(id, "None");
-          //await bot.sendMessage(
-          //  id,
-          //  randomizeMessage(["This feature is in development.", "This is not available at the moment."])
-          //)
-
           const products = await db
             .collection("products")
             .find({status: "promotion"})
