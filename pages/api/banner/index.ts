@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {connectToDB} from "../../../lib/db";
+import {redis} from "../../../lib/redis";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,12 +21,32 @@ export default async function handler(
     }
 
     const filter = Object.keys(temp).length ? temp : undefined;
+
+    const filterString = `banner:${JSON.stringify(filter) || "root"}`;
+
+    let cache;
+    try {
+      const c = await redis.get<any>(filterString);
+      if (c) {
+        cache = c;
+      }
+    } catch (error) {
+      console.log(error);
+      cache = null;
+    }
+    if (cache) {
+      return res.json({ok: true, data: cache, count: cache.length});
+    }
+
     const db = await connectToDB();
     const data = await db.collection("banners").find(filter).toArray();
     const count = data.length;
-    res.json({ok: true, data, count});
+
+    await redis.set(filterString, JSON.stringify(data), {ex: 60 * 5});
+
+    return res.json({ok: true, data, count});
   } catch (error) {
-    res.json({ok: false, error});
+    return res.json({ok: false, error});
   }
 }
 

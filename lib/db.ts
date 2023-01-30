@@ -1,6 +1,6 @@
 import * as mongodb from "mongodb";
-import { tbot } from "./telegram";
-import { parseProductInfo } from "./util";
+import {tbot} from "./telegram";
+import {parseProductInfo} from "./util";
 
 let db: mongodb.Db;
 
@@ -21,7 +21,6 @@ export const connectToDB = async () => {
     await createInitialIndex(db);
     return db;
   }
-  //console.log("Reusing db connection");
   return db;
 };
 
@@ -44,7 +43,7 @@ export const workerUpdateProducts = async (products: any[]) => {
   const productCollection = await db.collection("products");
 
   // Handle products
-  const productsToInsert = products.map((d) => ({ ...d, _id: d.product_no }));
+  const productsToInsert = products.map((d) => ({...d, _id: d.product_no}));
 
   const allProductsFromDatabase = await productCollection.find().toArray();
 
@@ -54,7 +53,7 @@ export const workerUpdateProducts = async (products: any[]) => {
     return isPass;
   });
 
-  const { newProducts, changedProducts } = productsToInsert.reduce<{
+  const {newProducts, changedProducts} = productsToInsert.reduce<{
     newProducts: any[];
     changedProducts: any[];
     remainingProducts: any[];
@@ -75,10 +74,10 @@ export const workerUpdateProducts = async (products: any[]) => {
       }
       return a;
     },
-    { newProducts: [], changedProducts: [], remainingProducts: [] }
+    {newProducts: [], changedProducts: [], remainingProducts: []}
   );
 
-  const { oosProducts, promotionProducts } = changedProducts.reduce<{
+  const {oosProducts, promotionProducts} = changedProducts.reduce<{
     oosProducts: any[];
     promotionProducts: any[];
   }>(
@@ -106,13 +105,13 @@ export const workerUpdateProducts = async (products: any[]) => {
   );
 
   const updateMany_ = {
-    filter: { _id: { $in: toArchive_.map((d) => d._id) } },
-    update: { $set: { status: "archived", lastUpdateAt: Date.now() } },
+    filter: {_id: {$in: toArchive_.map((d) => d._id)}},
+    update: {$set: {status: "archived", lastUpdateAt: Date.now()}},
   };
 
   const replaceMany_ = [...oosProducts, ...promotionProducts].map((up) => ({
     replaceOne: {
-      filter: { _id: up._id },
+      filter: {_id: up._id},
       replacement: up,
     },
   }));
@@ -127,7 +126,7 @@ export const workerUpdateProducts = async (products: any[]) => {
 
   if (toArchive_.length) {
     console.log("Archive", toArchive_.length);
-    bulkWriteOps.push({ updateMany: updateMany_ });
+    bulkWriteOps.push({updateMany: updateMany_});
   }
   if (replaceMany_.length) {
     console.log("Replace", replaceMany_.length);
@@ -266,7 +265,7 @@ export const workerUpdateProducts = async (products: any[]) => {
   //});
 
   if (res.result.ok) {
-    const { nInserted, nMatched, nModified, nRemoved, nUpserted } = res.result;
+    const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
 
     await logUpdatesToDb({
       ...res.result,

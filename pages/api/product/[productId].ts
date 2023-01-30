@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {connectToDB} from "../../../lib/db";
+import {redis} from "../../../lib/redis";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,14 +14,34 @@ export default async function handler(
 
   try {
     const {productId: product_no} = req.query;
+
+    const filterString = `product:${product_no}`;
+
+    let cache;
+    try {
+      const c = await redis.get<any>(filterString);
+      if (c) {
+        cache = c;
+      }
+    } catch (error) {
+      console.log(error);
+      cache = null;
+    }
+    if (cache) {
+      return res.json({ok: true, data: cache});
+    }
+
     const db = await connectToDB();
     const data = await db.collection("products").findOne({product_no});
+
+    await redis.set(filterString, JSON.stringify(data), {ex: 60 * 5});
+
     if (!data) {
       return res.json({ok: false, error: "No data"});
     }
-    res.json({ok: true, data});
+    return res.json({ok: true, data});
   } catch (error) {
-    res.json({ok: false, error});
+    return res.json({ok: false, error});
   }
 }
 
