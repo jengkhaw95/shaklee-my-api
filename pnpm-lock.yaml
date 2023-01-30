@@ -7,6 +7,7 @@ specifiers:
   '@types/node-cron': ^3.0.4
   '@types/react': 18.0.27
   '@upstash/qstash': ^0.3.3
+  '@upstash/ratelimit': 0.3.0-rc.1
   '@upstash/redis': ^1.19.3
   apidoc: ^0.51.1
   axios: ^0.27.2
@@ -28,6 +29,7 @@ specifiers:
 
 dependencies:
   '@upstash/qstash': 0.3.3
+  '@upstash/ratelimit': 0.3.0-rc.1_@upstash+redis@1.19.3
   '@upstash/redis': 1.19.3
   axios: 0.27.2
   body-parser: 1.20.1
@@ -2066,6 +2068,15 @@ packages:
     resolution: {integrity: sha512-Zzt6K2iUAkp4dehkSR6LN5UzCh5XQjZIjWl/I0fADj/glxbeIvFC9uGLRDSKpZMqfRe/Z+iQ3/WCEsE8c2J1Tw==}
     dependencies:
       '@deno/shim-crypto': 0.3.1
+    dev: false
+
+  /@upstash/ratelimit/0.3.0-rc.1_@upstash+redis@1.19.3:
+    resolution: {integrity: sha512-+a+T+Yz9FsbSDbvCo+Wh2cVoelDU+w0DSLBdzPR4uNxEulSEGRvPAuQAIEDVsus6cQmtLYVJgbM8fEAvfWXXdw==}
+    peerDependencies:
+      '@upstash/redis': ^1.4.0
+    dependencies:
+      '@deno/shim-crypto': 0.3.1
+      '@upstash/redis': 1.19.3
     dev: false
 
   /@upstash/redis/1.19.3:

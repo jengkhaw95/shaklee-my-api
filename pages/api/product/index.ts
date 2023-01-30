@@ -1,12 +1,16 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {connectToDB} from "../../../lib/db";
-import {redis} from "../../../lib/redis";
+import {ratelimit, redis} from "../../../lib/redis";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   req.statusCode = 200;
+
+  const result = await ratelimit.limit("product");
+  res.setHeader("X-RateLimit-Limit", result.limit);
+  res.setHeader("X-RateLimit-Remaining", result.remaining);
 
   if (req.method !== "GET") {
     return res.status(429);
