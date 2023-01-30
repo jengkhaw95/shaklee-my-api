@@ -15,7 +15,7 @@ It is now under a migration progress to serving RESTful API with serverless func
 - [x] Convert all `cron jobs` into `Queue` which is supported by `Upstash`'s `Qstash` feature.
 - [x] RESTful API for `products` & `banners`
 - [x] Convert Telegram webhook API endpoint for serverless function
-- [ ] Add caching & ratelimit for /GET endpoint
+- [x] Add caching & ratelimit for /GET endpoint
 - [ ] Use redis to store telegram client state
 - [ ] Static API Docs serving
 
@@ -28,10 +28,12 @@ This is a `typescript` project to:
 
 ## Tech Stack
 
-- Hosting - `Vercel`
+- Backend - `NextJS`
 - Database - `MongoDB`
-- Queue/Cron - `Upstash/Qstash`
+- Mem-Cache - `Upstash Redis`
+- Queue/Cron - `Upstash Qstash`
 - Telegram API - `Telegram official HTTP API`
+- Hosting - `Vercel`
 
 <!--## Introduction
 
