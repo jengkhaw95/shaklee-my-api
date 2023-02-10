@@ -34,6 +34,10 @@ This is a `typescript` project to:
 - Telegram API - `Telegram official HTTP API`
 - Hosting - `Vercel`
 
+## Misc
+
+Telegram Bot [link](https://telegram.me/ShakleeMYBot)
+
 <!--## Introduction
 
 This projects uses `ExpressJS` as a backend server to serve RESTful API for Shaklee Malaysia products.
