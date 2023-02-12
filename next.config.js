@@ -8,7 +8,7 @@ const nextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://shaklee-my-calc.vercel.app",
+            value: "*",
           },
           {key: "Access-Control-Allow-Methods", value: "GET,OPTIONS"},
         ],
