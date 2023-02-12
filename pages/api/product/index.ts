@@ -24,6 +24,8 @@ export default async function handler(
       } else {
         temp.status = q.status;
       }
+    } else {
+      temp.status = {$nin: ["archived"]};
     }
     if (q.search && typeof q.search === "string") {
       if (q.search.split(",").length > 1) {
