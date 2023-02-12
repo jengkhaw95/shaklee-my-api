@@ -1,3 +1,6 @@
 import {workerUpdateProducts} from ".";
 
-workerUpdateProducts();
+(async () => {
+  await Promise.resolve(workerUpdateProducts());
+  process.exit();
+})();

@@ -1,12 +1,12 @@
 // Entry point for worker
 // Job: update data to database
 
-import { time, timeEnd } from "console";
+import {time, timeEnd} from "console";
 import "dotenv/config";
-import { AnyBulkWriteOperation } from "mongodb";
-import { connectToDB } from "../db";
-import { parseProductInfo } from "../router/telegram";
-import { tbot } from "../telegram";
+import {AnyBulkWriteOperation} from "mongodb";
+import {connectToDB} from "../db";
+import {parseProductInfo} from "../router/telegram";
+import {tbot} from "../telegram";
 import Shaklee from "./shaklee";
 
 const logUpdatesToDb = async (document: any) => {
@@ -20,10 +20,10 @@ export const workerUpdateProducts = async () => {
     username: process.env.SHAKLEE_ID!,
     password: process.env.SHAKLEE_PW!,
   });
-  time("shaklee-produce")
+  time("shaklee-product");
   const products = await shaklee.getProducts();
 
-  timeEnd("shaklee-produce")
+  timeEnd("shaklee-product");
 
   //console.log(
   //  "VITA C 2",
@@ -34,7 +34,7 @@ export const workerUpdateProducts = async () => {
   const productCollection = await db.collection("products");
 
   // Handle products
-  const productsToInsert = products.map((d) => ({ ...d, _id: d.product_no }));
+  const productsToInsert = products.map((d) => ({...d, _id: d.product_no}));
 
   const allProductsFromDatabase = await productCollection.find().toArray();
 
@@ -44,7 +44,7 @@ export const workerUpdateProducts = async () => {
     return isPass;
   });
 
-  const { newProducts, changedProducts } = productsToInsert.reduce<{
+  const {newProducts, changedProducts} = productsToInsert.reduce<{
     newProducts: any[];
     changedProducts: any[];
     remainingProducts: any[];
@@ -65,10 +65,10 @@ export const workerUpdateProducts = async () => {
       }
       return a;
     },
-    { newProducts: [], changedProducts: [], remainingProducts: [] }
+    {newProducts: [], changedProducts: [], remainingProducts: []}
   );
 
-  const { oosProducts, promotionProducts } = changedProducts.reduce<{
+  const {oosProducts, promotionProducts} = changedProducts.reduce<{
     oosProducts: any[];
     promotionProducts: any[];
   }>(
@@ -96,16 +96,22 @@ export const workerUpdateProducts = async () => {
   );
 
   const updateMany_ = {
-    filter: { _id: { $in: toArchive_.map((d) => d._id) } },
-    update: { $set: { status: "archived", lastUpdateAt: Date.now() } },
+    filter: {_id: {$in: toArchive_.map((d) => d._id)}},
+    update: {$set: {status: "archived", lastUpdateAt: Date.now()}},
   };
 
-  const replaceMany_ = [...oosProducts, ...promotionProducts].map((up) => ({
+  const replaceMany_ = changedProducts.map((up) => ({
     replaceOne: {
-      filter: { _id: up._id },
+      filter: {_id: up._id},
       replacement: up,
     },
   }));
+  //const replaceMany_ = [...oosProducts, ...promotionProducts].map((up) => ({
+  //  replaceOne: {
+  //    filter: {_id: up._id},
+  //    replacement: up,
+  //  },
+  //}));
 
   const insertMany_ = newProducts.map((ad) => ({
     insertOne: {
@@ -117,7 +123,7 @@ export const workerUpdateProducts = async () => {
 
   if (toArchive_.length) {
     console.log("Archive", toArchive_.length);
-    bulkWriteOps.push({ updateMany: updateMany_ });
+    bulkWriteOps.push({updateMany: updateMany_});
   }
   if (replaceMany_.length) {
     console.log("Replace", replaceMany_.length);
@@ -256,7 +262,7 @@ export const workerUpdateProducts = async () => {
   //});
 
   if (res.result.ok) {
-    const { nInserted, nMatched, nModified, nRemoved, nUpserted } = res.result;
+    const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
 
     await logUpdatesToDb({
       ...res.result,
@@ -327,25 +333,25 @@ export const workerUpdateBanner = async () => {
   const bannerCollection = await db.collection("banners");
 
   // Handle banners
-  const bannersToInsert = banners.map((d) => ({ ...d, _id: d.name }));
+  const bannersToInsert = banners.map((d) => ({...d, _id: d.name}));
 
   const outdatedBanners = await bannerCollection
     .find({
-      _id: { $nin: bannersToInsert.map((d) => d._id) },
-      status: { $ne: "archived" },
+      _id: {$nin: bannersToInsert.map((d) => d._id)},
+      status: {$ne: "archived"},
     })
     .toArray();
 
   if (outdatedBanners.length) {
     console.log(`Found ${outdatedBanners.length} outdated banner(s)`);
     await bannerCollection.updateMany(
-      { _id: { $in: outdatedBanners.map((d) => d._id) } },
-      { $set: { status: "archived", lastUpdateAt: Date.now() } }
+      {_id: {$in: outdatedBanners.map((d) => d._id)}},
+      {$set: {status: "archived", lastUpdateAt: Date.now()}}
     );
   }
 
   const bulkWriteActions = bannersToInsert.map((p) => ({
-    replaceOne: { filter: { _id: p._id }, replacement: p, upsert: true },
+    replaceOne: {filter: {_id: p._id}, replacement: p, upsert: true},
   }));
 
   const res = await bannerCollection.bulkWrite(bulkWriteActions, {
@@ -353,7 +359,7 @@ export const workerUpdateBanner = async () => {
   });
 
   if (res.result.ok) {
-    const { nInserted, nMatched, nModified, nRemoved, nUpserted } = res.result;
+    const {nInserted, nMatched, nModified, nRemoved, nUpserted} = res.result;
 
     await logUpdatesToDb({
       ...res.result,
