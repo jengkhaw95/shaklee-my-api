@@ -1,6 +1,6 @@
-import {connectToDB} from "../../../../lib/db";
-import {redis} from "../../../../lib/redis";
-import {availableOptions, tbot as bot} from "../../../../lib/telegram";
+import { connectToDB } from "../../../../lib/db";
+import { redis } from "../../../../lib/redis";
+import { availableOptions, tbot as bot } from "../../../../lib/telegram";
 import {
   parseProductInfo,
   randomizeMessage,
@@ -20,9 +20,9 @@ const handler = async (req, res) => {
   }
   const {
     message: {
-      from: {is_bot},
+      from: { is_bot },
       text,
-      chat: {id},
+      chat: { id },
     },
   } = req.body;
 
@@ -53,16 +53,20 @@ const handler = async (req, res) => {
         "You've already subscribed.\n/unsubscribe to unsubscribe."
       );
     } else {
-      const {acknowledged} = await db
-        .collection("subscriptions")
-        .insertOne({chatId: id, createdAt: Date.now()});
-      if (acknowledged) {
-        bot.addSubscriber(id);
-        bot.sendMessage(
-          id,
-          "Successfully subscribed!\nYou will start receiving latest updates!"
-        );
-      } else {
+      try {
+        const { acknowledged } = await db
+          .collection("subscriptions")
+          .insertOne({ chatId: id, createdAt: Date.now() });
+        if (acknowledged) {
+          bot.addSubscriber(id);
+          bot.sendMessage(
+            id,
+            "Successfully subscribed!\nYou will start receiving latest updates!"
+          );
+        } else {
+          bot.sendMessage(id, "Something went wrong. Please try again later.");
+        }
+      } catch (error) {
         bot.sendMessage(id, "Something went wrong. Please try again later.");
       }
     }
@@ -71,9 +75,9 @@ const handler = async (req, res) => {
 
   if (text === "/unsubscribe") {
     if (bot.isSubscriber(id)) {
-      const {acknowledged} = await db
+      const { acknowledged } = await db
         .collection("subscriptions")
-        .deleteOne({chatId: id});
+        .deleteOne({ chatId: id });
       if (acknowledged) {
         bot.removeSubscriber(id);
         bot.sendMessage(id, "You have unsubscribed.");
@@ -108,7 +112,7 @@ const handler = async (req, res) => {
         {
           const products = await db
             .collection("products")
-            .find({status: "promotion"})
+            .find({ status: "promotion" })
             .toArray();
 
           if (products.length) {
@@ -134,7 +138,7 @@ const handler = async (req, res) => {
         {
           const banners = await db
             .collection("banners")
-            .find({status: {$exists: false}})
+            .find({ status: { $exists: false } })
             .toArray();
           //const promises = banners.map((b) =>
           //  bot.sendImage(id, b.images_url[0])
@@ -164,7 +168,7 @@ const handler = async (req, res) => {
       {
         const products = await db
           .collection("products")
-          .find({$text: {$search: text}})
+          .find({ $text: { $search: text } })
           .toArray();
 
         if (products.length) {
