@@ -63,15 +63,22 @@ const handler = async (req, res) => {
           .insertOne({chatId: id, createdAt: Date.now()});
         if (acknowledged) {
           bot.addSubscriber(id);
-          bot.sendMessage(
+          await bot.sendMessage(
             id,
             "Successfully subscribed!\nYou will start receiving latest updates!"
           );
         } else {
-          bot.sendMessage(id, "Something went wrong. Please try again later.");
+          await bot.sendMessage(
+            id,
+            "Something went wrong. Please try again later."
+          );
         }
       } catch (error) {
-        bot.sendMessage(id, "Something went wrong. Please try again later.");
+        console.log({error});
+        await bot.sendMessage(
+          id,
+          "Something went wrong. Please try again later."
+        );
       }
     }
     return res.status(200).send("ok");
@@ -81,17 +88,31 @@ const handler = async (req, res) => {
     const isExists = await db.collection("subscriptions").findOne({chatId: id});
 
     if (isExists) {
-      const {acknowledged} = await db
-        .collection("subscriptions")
-        .deleteOne({chatId: id});
-      if (acknowledged) {
-        bot.removeSubscriber(id);
-        bot.sendMessage(id, "You have unsubscribed.");
-      } else {
-        bot.sendMessage(id, "Something went wrong. Please try again later.");
+      try {
+        const {acknowledged} = await db
+          .collection("subscriptions")
+          .deleteOne({chatId: id});
+        if (acknowledged) {
+          bot.removeSubscriber(id);
+          await bot.sendMessage(id, "You have unsubscribed.");
+        } else {
+          await bot.sendMessage(
+            id,
+            "Something went wrong. Please try again later."
+          );
+        }
+      } catch (error) {
+        console.log({error});
+        await bot.sendMessage(
+          id,
+          "Something went wrong. Please try again later."
+        );
       }
     } else {
-      bot.sendMessage(id, "You are not subscribed.\n/subscribe to subscribe.");
+      await bot.sendMessage(
+        id,
+        "You are not subscribed.\n/subscribe to subscribe."
+      );
     }
     return res.status(200).send("ok");
   }
