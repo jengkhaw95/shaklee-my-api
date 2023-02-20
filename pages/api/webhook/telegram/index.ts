@@ -52,7 +52,7 @@ const handler = async (req, res) => {
     const isExists = await db.collection("subscriptions").findOne({chatId: id});
     console.log(!!isExists);
     if (isExists) {
-      bot.sendMessage(
+      await bot.sendMessage(
         id,
         "You've already subscribed.\n/unsubscribe to unsubscribe."
       );
