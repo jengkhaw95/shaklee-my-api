@@ -30,6 +30,7 @@ const handler = async (req, res) => {
   if (is_bot) {
     return res.status(200).send("ok");
   }
+  console.log({text});
 
   const db = await connectToDB();
 
@@ -49,7 +50,7 @@ const handler = async (req, res) => {
 
   if (text === "/subscribe") {
     const isExists = await db.collection("subscriptions").findOne({chatId: id});
-
+    console.log(!!isExists);
     if (isExists) {
       bot.sendMessage(
         id,
