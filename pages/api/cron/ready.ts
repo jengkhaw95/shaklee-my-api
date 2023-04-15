@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { verifySignature } from "@upstash/qstash/nextjs";
+import {NextApiRequest, NextApiResponse} from "next";
+import {verifySignature} from "@upstash/qstash/nextjs";
 import Shaklee from "../../../lib/shaklee";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -15,12 +15,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.timeEnd("get meta");
 
   //   fetch
-
+  //https://qstash.upstash.io/v1/publish/
   const url = `${process.env.QSTASH_URL!}https://${
     process.env.VERCEL_URL
   }/api/cron/update-product`;
-  process.env.QSTASH_URL! +
-    "https://shaklee-my-api.vercel.app/api/cron/update-product";
 
   const headers = {
     Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
@@ -29,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const body = JSON.stringify(data);
 
-  console.log({ url, headers, body });
+  console.log({url, headers, body});
   const r = await fetch(url, {
     method: "POST",
     headers,
@@ -37,8 +35,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const d = await r.json();
-  console.log({ d });
-  return res.json({ ok: true, data });
+  console.log({d});
+  return res.json({ok: true, data});
   //   return res.status(500).json({});
   //
 

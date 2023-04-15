@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { verifySignature } from "@upstash/qstash/nextjs";
+import {NextApiRequest, NextApiResponse} from "next";
+import {verifySignature} from "@upstash/qstash/nextjs";
 import Shaklee from "../../../lib/shaklee";
-import { workerUpdateProducts } from "../../../lib/db";
+import {workerUpdateProducts} from "../../../lib/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   req.statusCode = 200;
@@ -19,10 +19,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await workerUpdateProducts(data);
   console.timeEnd("update products");
 
-  res.json({ ok: true });
+  res.json({ok: true});
 };
 
-export default verifySignature(handler);
+export default handler; //verifySignature(handler);
 
 export const config = {
   api: {
