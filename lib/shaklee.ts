@@ -1,4 +1,4 @@
-import axios, { AxiosResponseHeaders } from "axios";
+import axios, {AxiosResponseHeaders} from "axios";
 import * as cheerio from "cheerio";
 import * as entities from "entities";
 
@@ -29,7 +29,7 @@ export default class Shaklee {
   async init() {
     const token = await this.getCSRFToken();
     const cookie = await this.getCookies();
-    return { token, cookie };
+    return {token, cookie};
   }
 
   private reset() {
@@ -88,7 +88,7 @@ export default class Shaklee {
     this.cookie = headers["set-cookie"]?.map((c) => c.split(";")[0]).join("; ");
   };
 
-  private objectToQueryString(obj: { [key: string]: any }) {
+  private objectToQueryString(obj: {[key: string]: any}) {
     const res: string[] = [];
     for (let i in obj) {
       let k = encodeURIComponent(i);
@@ -110,7 +110,6 @@ export default class Shaklee {
 
   async getProducts(cookie?: string, token?: string) {
     if (!(cookie && token) && !this.isAuth) {
-      console.log("AUTHing");
       await this.init();
     }
     try {
