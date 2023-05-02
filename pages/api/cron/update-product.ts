@@ -11,6 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     password: process.env.SHAKLEE_PW!,
   });
 
+  console.log(req.body);
+
   console.time("get products");
   const data = await s.getProducts(req.body.cookie, req.body.token);
   console.timeEnd("get products");
@@ -24,8 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 export default handler; //verifySignature(handler);
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+//export const config = {
+//  api: {
+//    bodyParser: false,
+//  },
+//};
