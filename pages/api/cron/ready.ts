@@ -27,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const body = JSON.stringify(data);
 
-  console.log({url, headers, body});
+  //console.log({url, headers, body});
   const r = await fetch(url, {
     method: "POST",
     headers,
